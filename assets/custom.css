@@ -1,0 +1,438 @@
+/*// =============================================================================
+// Ella Custom CSS - Customize The Style For Layout
+// =============================================================================
+
+// =============================================================================
+//
+// IMPORTANT DISCLAIMER
+// Shopify is notifying shop owners about the need to convert scss files to css files.
+// Please use only CSS to style the layout.
+//
+// =============================================================================*/
+/* ====== RESET ====== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Barlow", sans-serif;
+  overflow-x: hidden;
+}
+
+
+/* ====== NAVBAR ====== */
+/* By default, hide on mobile/tablet */
+.custom-header-pc {
+  display: none;
+}
+
+/* Show only on desktop (min-width: 1024px) */
+@media screen and (min-width: 1024px) {
+  .custom-header-pc {
+    display: block;
+  }
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  z-index: 1000;
+}
+
+/* ====== NAV MENU ====== */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 40px;
+}
+
+.nav-item a {
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-item a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.nav-item a:hover::after {
+  width: 100%;
+}
+
+/* ====== RIGHT NAV MENU LINKS ====== */
+.nav-right .nav-menu li a {
+  color: #000;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+.nav-right .nav-menu li a:hover {
+  color: #333;
+  font-weight: 600;
+}
+
+/* ====== LOGO ====== */
+.nav-logo {
+  height: 40px;
+  cursor: pointer;
+}
+
+/* ====== DROPDOWN ====== */
+.dropdown {
+  display: none;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 50%;
+  height: 100vh;
+  background: white;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.4s ease;
+}
+
+.dropdown.active {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ====== LEFT MENU AREA ====== */
+.dropdown-left {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid #eee;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ====== SCROLL AREA ====== */
+.menu-scroll-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #aaa #f5f5f5;
+  padding-bottom: 100px;
+}
+
+.menu-scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+.menu-scroll-area::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+.menu-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
+
+/* ====== NEW ARRIVAL ====== */
+.new-arrival-banner {
+  background: black;
+  color: white;
+  padding: 20px 40px;
+}
+.new-arrival-banner .label {
+  font-weight: 700;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+}
+.arrival-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.new-tag {
+  background: white;
+  color: black;
+  font-weight: 700;
+  width: 25px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.collection-title {
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: white;
+  text-decoration: none;
+}
+.collection-title:hover {
+  text-decoration: underline;
+}
+
+/* ====== MENU SECTIONS ====== */
+.menu-sections {
+  padding: 40px;
+}
+.menu-group {
+  margin-bottom: 30px;
+}
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.toggle h4 {
+  font-size: 26px;
+  font-weight: 700;
+}
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+.toggle.active .arrow-icon {
+  transform: rotate(90deg);
+}
+
+/* ====== SUBMENU ====== */
+.menu-group ul {
+  list-style: none;
+  margin-top: 10px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+.menu-group ul.active {
+  max-height: 500px;
+  opacity: 1;
+}
+.menu-group ul li a {
+  display: block;
+  padding: 8px 0;
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+.menu-group ul li a:hover {
+  color: #777;
+}
+
+/* ====== EXTRA LINKS ====== */
+.extra-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 40px;
+}
+.extra-links a {
+  text-decoration: none;
+  color: #000;
+  font-size: 16px;
+  transition: font-weight 0.2s ease;
+}
+.extra-links a:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ====== FOOTER ====== */
+.footer-bottom-links {
+  flex-shrink: 0;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+.footer-bottom-links a {
+  text-decoration: none;
+  color: #000;
+  text-transform: uppercase;
+  transition: font-weight 0.2s ease;
+}
+.footer-bottom-links a:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ====== RIGHT IMAGE AREA ====== */
+.dropdown-right {
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+}
+.dropdown-right img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .dropdown {
+    flex-direction: column;
+    height: auto;
+  }
+  .dropdown-left,
+  .dropdown-right {
+    width: 50%;
+  }
+  .dropdown-right {
+    height: 300px;
+  }
+}
+/* ------------------------------------------------------------------------------product card plus icon for size variant--------------------------------- */
+/* Container at bottom-right */
+.product-size-wrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+}
+
+/* Plus Icon */
+.show-sizes-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #000;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+.show-sizes-icon:hover {
+  background: #333;
+}
+
+/* Size Bar (initially hidden) */
+.sizes-popup {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid #eee;
+  padding: 8px 10px;
+  display: none;
+  z-index: 2;
+}
+
+/* Keep visible while hovering over bar or icon */
+.product-size-wrapper:hover .sizes-popup,
+.sizes-popup:hover {
+  display: block;
+}
+
+/* Layout */
+.sizes-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.size-item a {
+  display: inline-block;
+  background: #f6f6f6;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.size-item a:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* --------------- */
+/* --------------- */
+.add-to-cart-size-btn {
+  background: #f6f6f6;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.add-to-cart-size-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+.added-msg {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: green;
+  margin-top: 6px;
+}
+
+/* ----------------------------------product card title and price--------------------? */
+
+@media (min-width: 992px) {
+  .card-information__wrapper {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .card-title-change {
+    font-size: 12px !important;
+    color: black !important;
+    font-weight: 600 !important;
+  }
+
+  .price-item {
+    font-size: 12px !important;
+    color: black !important;
+    font-weight: 600 !important;
+  }
+}

@@ -1,0 +1,38 @@
+{% comment %}
+========================
+CUSTOM HEADER (PC ONLY)
+========================
+{% endcomment %}
+
+<section class="custom-header-pc">
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <ul class="nav-menu">
+        <li class="nav-item" data-menu="men"><a href="{{ routes.collections_url }}/t-shirts">Men</a></li>
+        <li class="nav-item" data-menu="women"><a href="#">Women</a></li>
+        <li class="nav-item" data-menu="exceptional"><a href="#">Exceptionals</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-center">
+      <a href="/">
+       <img src="https://cdn.shopify.com/s/files/1/0702/2493/7184/files/NameLogo_d57b43eb-c7d4-4842-8fa9-2c63fb6015d4.webp?v=1760155823" alt="Easywear" class="nav-logo" />
+
+      </a>
+    </div>
+
+    <div class="nav-right">
+      <ul class="nav-menu">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="/account">Account</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Include dropdowns -->
+  {% render 'mega-menu-men' %}
+  {% render 'mega-menu-women' %}
+  {% render 'mega-menu-exceptional' %}
+</section>

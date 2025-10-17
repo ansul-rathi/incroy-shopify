@@ -1,0 +1,253 @@
+<div class="mobile-menu-wrapper">
+  <!-- Trigger Button -->
+  <button class="menu-trigger" id="openMenu">☰</button>
+
+  <!-- Overlay Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <!-- Header -->
+    <div class="menu-header">
+      <span class="close-icon" id="closeMenu">✕</span>
+      <ul class="menu-tabs">
+        <li><a href="#">MEN</a></li>
+        <li><a href="#">WOMEN</a></li>
+        <li><a href="#">EXCEPTIONALS</a></li>
+      </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="menu-content">
+      <!-- New Arrival -->
+      <div class="new-arrival">
+        <h3>NEW ARRIVAL</h3>
+        <div class="arrival-item">
+          <span class="n-icon">N</span>
+          <span class="arrival-text">BILLIONAIRE'S AFTERNOON</span>
+        </div>
+      </div>
+
+      <!-- SHOP -->
+      <div class="menu-section">
+        <h2 class="menu-title" id="shopToggle">SHOP <span class="arrow">→</span></h2>
+        <ul class="submenu" id="shopList">
+          <li><a href="#">Shop All</a></li>
+          <li><a href="#">T-Shirts</a></li>
+          <li><a href="#">Shirts</a></li>
+          <li><a href="#">Vest</a></li>
+          <li><a href="#">Pants</a></li>
+          <li><a href="#">Denim Jeans</a></li>
+        </ul>
+      </div>
+
+      <!-- DROPS -->
+      <div class="menu-section">
+        <h2 class="menu-title" id="dropsToggle">DROPS <span class="arrow">→</span></h2>
+        <ul class="submenu" id="dropsList">
+          <li><a href="#">Billionaire’s Afternoon (SS25)</a></li>
+          <li><a href="#">Rev It (SS25)</a></li>
+          <li><a href="#">Crushed Elegance (FW25)</a></li>
+          <li><a href="#">Romance with Nature (SS24)</a></li>
+        </ul>
+      </div>
+
+      <!-- Footer -->
+      <div class="menu-footer">
+        <a href="#">NEED HELP</a>
+        <a href="#">BLOGS</a>
+        <a href="#">ACCOUNT</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@media (max-width: 768px) {
+  .mobile-menu-wrapper {
+    display: block;
+  }
+
+  .menu-trigger {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 26px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  /* Overlay Menu */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+    transition: left 0.4s ease;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-menu.active {
+    left: 0;
+  }
+
+  /* Header */
+  .menu-header {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .close-icon {
+    font-size: 28px;
+    padding: 20px;
+    cursor: pointer;
+  }
+
+  .menu-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    list-style: none;
+    padding: 0 0 10px;
+    margin: 0;
+  }
+
+  .menu-tabs a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 15px;
+    position: relative;
+  }
+
+  .menu-tabs a:hover {
+    text-decoration: underline;
+  }
+
+  /* New Arrival */
+  .new-arrival {
+    background: #000;
+    color: #fff;
+    padding: 14px 20px;
+    margin-top: 10px;
+  }
+
+  .new-arrival h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .arrival-item {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    gap: 8px;
+  }
+
+  .n-icon {
+    background: #fff;
+    color: #000;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+
+  .arrival-text {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Section Titles */
+  .menu-section {
+    padding: 20px;
+  }
+
+  .menu-title {
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    align-items: center;
+  }
+
+  .menu-title .arrow {
+    font-size: 20px;
+    opacity: 0.6;
+  }
+
+  /* Submenu */
+  .submenu {
+    display: none;
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 10px;
+  }
+
+  .submenu a {
+    text-decoration: none;
+    color: #000;
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* Footer Links */
+  .menu-footer {
+    display: flex;
+    flex-direction: column;
+    padding: 25px 20px;
+    gap: 15px;
+    margin-top: auto;
+  }
+
+  .menu-footer a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 700;
+    font-size: 18px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const openMenu = document.getElementById("openMenu");
+  const closeMenu = document.getElementById("closeMenu");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const shopToggle = document.getElementById("shopToggle");
+  const dropsToggle = document.getElementById("dropsToggle");
+  const shopList = document.getElementById("shopList");
+  const dropsList = document.getElementById("dropsList");
+
+  openMenu.addEventListener("click", () => {
+    mobileMenu.classList.add("active");
+    openMenu.style.display = "none";
+  });
+
+  closeMenu.addEventListener("click", () => {
+    mobileMenu.classList.remove("active");
+    openMenu.style.display = "block";
+  });
+
+  shopToggle.addEventListener("click", () => {
+    const isOpen = shopList.style.display === "block";
+    shopList.style.display = isOpen ? "none" : "block";
+    shopToggle.querySelector(".arrow").textContent = isOpen ? "→" : "↓";
+  });
+
+  dropsToggle.addEventListener("click", () => {
+    const isOpen = dropsList.style.display === "block";
+    dropsList.style.display = isOpen ? "none" : "block";
+    dropsToggle.querySelector(".arrow").textContent = isOpen ? "→" : "↓";
+  });
+});
+</script>

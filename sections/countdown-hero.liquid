@@ -1,0 +1,169 @@
+{% schema %}
+{
+  "name": "Countdown Hero Banner",
+  "settings": [
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Banner Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "text",
+      "id": "heading_small",
+      "label": "Small Heading",
+      "default": "COMING SOON"
+    },
+    {
+      "type": "text",
+      "id": "heading_large",
+      "label": "Main Heading",
+      "default": "247 FW25 II"
+    },
+    {
+      "type": "text",
+      "id": "countdown_date",
+      "label": "Countdown End Date (YYYY-MM-DD HH:MM:SS)",
+      "default": "2025-12-31 23:59:59"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown Hero Banner"
+    }
+  ]
+}
+{% endschema %}
+
+<!-- ✅ Fixed Countdown Hero Banner -->
+<div
+  x-data="countdownHero('{{ section.settings.countdown_date }}')"
+  class="countdown-hero-banner relative w-full h-screen overflow-hidden text-white"
+  data-section-id="{{ section.id }}"
+>
+  <!-- ✅ Background Images -->
+  <div class="absolute inset-0">
+    <!-- Mobile Image -->
+    <img 
+      src="{{ section.settings.mobile_image | image_url: width: 800 }}" 
+      alt=""
+      class="block md:hidden w-full h-full object-cover"
+    >
+    <!-- Desktop Image -->
+    <img 
+      src="{{ section.settings.desktop_image | image_url: width: 2000 }}" 
+      alt=""
+      class="hidden md:block w-full h-full object-cover"
+    >
+  </div>
+
+  <!-- ✅ Content Overlay -->
+  <a
+    href="{{ section.settings.banner_link }}"
+    class="absolute inset-0 flex flex-col items-center justify-end text-center pb-8 md:pb-12 z-10"
+  >
+    <div class="flex flex-col gap-2 md:gap-4 max-w-4xl px-4">
+      <!-- Small Heading -->
+      <span class="text-sm md:text-base uppercase tracking-widest block">
+        {{ section.settings.heading_small }}
+      </span>
+      
+      <!-- Line Break -->
+      <br class="hidden md:block">
+      
+      <!-- Main Heading -->
+      <span class="text-2xl md:text-4xl lg:text-5xl font-bold uppercase block">
+        {{ section.settings.heading_large }}
+      </span>
+      
+      <!-- Line Break -->
+      <br class="hidden md:block">
+      
+      <!-- Countdown Timer -->
+      <div 
+        class="inline-flex gap-1 md:gap-2 font-bold uppercase text-base md:text-xl lg:text-2xl justify-center"
+        style="font-feature-settings:'tnum'; font-variant-numeric: tabular-nums;"
+      >
+        <span x-text="time().days">00</span><span>d</span>
+        <span>:</span>
+        <span x-text="time().hours">00</span><span>h</span>
+        <span>:</span>
+        <span x-text="time().minutes">00</span><span>m</span>
+        <span>:</span>
+        <span x-text="time().seconds">00</span><span>s</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- ✅ Countdown Script -->
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('countdownHero', (expiryString) => ({
+      expiry: new Date(expiryString.replace(' ', 'T')).getTime(),
+      remaining: 0,
+      timer: null,
+      init() {
+        this.updateTime();
+        this.timer = setInterval(() => this.updateTime(), 1000);
+      },
+      updateTime() {
+        const now = new Date().getTime();
+        this.remaining = Math.max(0, parseInt((this.expiry - now) / 1000));
+      },
+      format(num) {
+        return ('0' + parseInt(num)).slice(-2);
+      },
+      time() {
+        const days = Math.floor(this.remaining / 86400);
+        const hours = Math.floor((this.remaining % 86400) / 3600);
+        const minutes = Math.floor((this.remaining % 3600) / 60);
+        const seconds = this.remaining % 60;
+        return {
+          days: this.format(days),
+          hours: this.format(hours),
+          minutes: this.format(minutes),
+          seconds: this.format(seconds)
+        };
+      }
+    }));
+  });
+</script>
+
+<style>
+  .countdown-hero-banner {
+    min-height: 100vh;
+  }
+  
+  /* Ensure proper overlay positioning */
+  .countdown-hero-banner a {
+    text-decoration: none;
+  }
+  
+  /* Add a subtle overlay to improve text readability */
+  .countdown-hero-banner::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+    z-index: 1;
+  }
+  
+  /* Ensure text stays above the gradient overlay */
+  .countdown-hero-banner > a {
+    z-index: 2;
+  }
+</style>

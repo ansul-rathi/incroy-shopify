@@ -1,0 +1,35 @@
+{%- assign variantCount = product.variants | size -%}
+{%- if product.available and variantCount > 0 -%}
+<div class="product-size-wrapper" data-product-id="{{ product.id }}">
+  <!-- Plus Icon -->
+  <div class="show-sizes-icon">
+    <span>+</span>
+  </div>
+
+  <!-- Size Bar -->
+  <div class="sizes-popup">
+    <ul class="sizes-list">
+      {%- for option in product.options_with_values -%}
+        {%- assign downcased_option = option.name | downcase -%}
+        {%- if downcased_option contains 'size' -%}
+          {%- for value in option.values -%}
+            {%- assign variant = product.variants | where: 'option1', value | first -%}
+            {%- if variant and variant.available -%}
+              <li class="size-item">
+                <button 
+                  type="button" 
+                  class="add-to-cart-size-btn" 
+                  data-variant-id="{{ variant.id }}">
+                  {{ value }}
+                </button>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+    <span class="added-msg" style="display:none;">✓ Added!</span>
+  </div>
+</div>
+{%- endif -%}
+

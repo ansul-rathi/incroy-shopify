@@ -3,13 +3,13 @@
 CUSTOM HEADER (PC ONLY)
 ========================
 {% endcomment %}
-
+{{ 'custom-mega-menu.css' | asset_url | stylesheet_tag }}
 <section class="custom-header-pc">
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
       <ul class="nav-menu">
-        <li class="nav-item" data-menu="men"><a href="{{ routes.collections_url }}/t-shirts">Men</a></li>
+        <li class="nav-item" data-menu="men"><a href="#">Men</a></li>
         <li class="nav-item" data-menu="women"><a href="#">Women</a></li>
         <li class="nav-item" data-menu="exceptional"><a href="#">Exceptionals</a></li>
       </ul>
@@ -26,7 +26,13 @@ CUSTOM HEADER (PC ONLY)
       <ul class="nav-menu">
         <li><a href="#">About</a></li>
         <li><a href="#">Blog</a></li>
-        <li><a href="/account">Account</a></li>
+        <li><a href="{{ routes.account_url }}">Account</a></li>
+        <li><a href="{{ routes.cart_url }}" class="header__icon header__icon--cart" {% if settings.show_quick_cart %} data-cart-sidebar{% endif %}>
+    {% render 'icon-cart-02', class: 'stroke-icon', width: '24' %}
+    <div class="cart-count-bubble">
+        <span class="text" data-cart-count>{{ cart.item_count }}</span>
+    </div>
+</a></li>
       </ul>
     </div>
   </header>

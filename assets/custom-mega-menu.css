@@ -1,0 +1,538 @@
+/* =============================================================================
+   CUSTOM MEGA MENU - Separate CSS File
+   ============================================================================= */
+
+/* ====== CUSTOM HEADER PC - Hide on Mobile/Tablet ====== */
+.custom-header-pc {
+  display: none;
+}
+
+/* Show only on desktop (min-width: 1024px) */
+@media screen and (min-width: 1024px) {
+  .custom-header-pc {
+    display: block;
+  }
+}
+
+/* ====== NAVBAR ====== */
+.custom-header-pc .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent !important;
+  z-index: 1000;
+  transition: background-color 0.3s ease !important;
+}
+
+/* ====== NAV MENU ====== */
+.custom-header-pc .nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 40px;
+}
+
+.custom-header-pc .nav-item a {
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: white !important;
+  text-decoration: none;
+  transition: color 0.3s ease !important;
+}
+
+.custom-header-pc .nav-item a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.custom-header-pc .nav-item a:hover::after {
+  width: 100%;
+}
+
+/* ====== RIGHT NAV MENU LINKS ====== */
+.custom-header-pc .nav-right .nav-menu li a {
+  color: white !important;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.3s ease !important;
+}
+
+.custom-header-pc .nav-right .nav-menu li a:hover {
+  font-weight: 600;
+}
+
+/* ====== LOGO ====== */
+.custom-header-pc .nav-logo {
+  height: 40px;
+  cursor: pointer;
+  filter: brightness(0) invert(1) !important;
+  transition: filter 0.3s ease !important;
+}
+
+/* ====== HEADER ICONS ====== */
+.custom-header-pc .navbar .header__icon {
+  color: white !important;
+  transition: color 0.3s ease !important;
+}
+
+.custom-header-pc .header__icon .icon {
+  fill: rgb(255, 255, 255);
+  stroke: transparent;
+}
+
+.custom-header-pc .header__icon span {
+  display: flex !important;
+}
+
+.custom-header-pc .header__icon .w-h-24 {
+  width: 18px;
+  height: 18px;
+}
+
+/* ====== CART COUNT BUBBLE ====== */
+.custom-header-pc .navbar .cart-count-bubble {
+  background: white !important;
+  color: black !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  top: -8px;
+  left: -8px;
+  height: 18px;
+  width: 18px;
+}
+
+@media (min-width: 768px) {
+  .cart-count-bubble,
+  .wishlist-count-bubble {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+}
+
+/* ====== NAVBAR HOVER STATE - Only on Menu Items with Dropdown ====== */
+/* When hovering on Men/Women/Exceptional menu items */
+.custom-header-pc .nav-item[data-menu]:hover ~ .nav-center .nav-logo,
+.custom-header-pc .nav-item[data-menu]:hover ~ .nav-right a,
+.custom-header-pc .nav-item[data-menu]:hover ~ .nav-right .header__icon {
+  color: black !important;
+}
+
+/* When dropdown is active, change navbar to white */
+.custom-header-pc:has(.dropdown.active) .navbar {
+  background: white !important;
+}
+
+.custom-header-pc:has(.dropdown.active) .navbar a,
+.custom-header-pc:has(.dropdown.active) .navbar .nav-item a,
+.custom-header-pc:has(.dropdown.active) .navbar .header__icon {
+  color: black !important;
+}
+
+.custom-header-pc:has(.dropdown.active) .navbar .stroke-icon {
+  stroke: black !important;
+}
+
+.custom-header-pc:has(.dropdown.active) .navbar .cart-count-bubble {
+  background: black !important;
+  color: white !important;
+}
+
+.custom-header-pc:has(.dropdown.active) .navbar .nav-logo {
+  filter: brightness(0) invert(0) !important;
+}
+
+/* When hovering specifically on nav-item with data-menu */
+.custom-header-pc .nav-left:has(.nav-item[data-menu]:hover) ~ .navbar,
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar {
+  background: white !important;
+}
+
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar a,
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .nav-item a,
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .header__icon {
+  color: black !important;
+}
+
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .stroke-icon {
+  stroke: black !important;
+}
+
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .cart-count-bubble {
+  background: black !important;
+  color: white !important;
+}
+
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .nav-logo {
+  filter: brightness(0) invert(0) !important;
+}
+
+/* ====== DROPDOWN ====== */
+.dropdown {
+  display: none;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  
+  height: 100vh;
+  background: white;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.4s ease;
+}
+
+.dropdown.active {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ====== LEFT MENU AREA ====== */
+.dropdown-left {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid #eee;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ====== SCROLL AREA ====== */
+.menu-scroll-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #aaa #f5f5f5;
+  padding-bottom: 100px;
+}
+
+.menu-scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.menu-scroll-area::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.menu-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
+
+/* ====== NEW ARRIVAL BANNER ====== */
+.new-arrival-banner {
+  background: black;
+  color: white;
+  padding: 20px 40px;
+}
+
+.new-arrival-banner .label {
+  font-weight: 700;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.arrival-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.new-tag {
+  background: white;
+  color: black;
+  font-weight: 700;
+  width: 25px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.collection-title {
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: white;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+}
+
+.collection-title::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.collection-title:hover::after {
+  width: 100%;
+}
+
+/* ====== MENU SECTIONS ====== */
+.menu-sections {
+  padding: 40px;
+}
+
+.menu-group {
+  margin-bottom: 30px;
+}
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.toggle h4 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.toggle.active .arrow-icon {
+  transform: rotate(90deg);
+}
+
+/* ====== SUBMENU ====== */
+.menu-group ul {
+  list-style: none;
+  margin-top: 10px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+.menu-group ul.active {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.menu-group ul li a {
+  display: inline-block;
+  padding: 8px 0;
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.menu-group ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.menu-group ul li a:hover::after {
+  width: 100%;
+}
+
+.menu-group ul li a:hover {
+  color: #000;
+}
+
+/* ====== EXTRA LINKS ====== */
+.extra-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 40px;
+}
+
+.extra-links a {
+  text-decoration: none;
+  color: #000;
+  font-size: 16px;
+  transition: font-weight 0.2s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.extra-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.extra-links a:hover::after {
+  width: 100%;
+}
+
+.extra-links a:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ====== FOOTER BOTTOM LINKS ====== */
+.footer-bottom-links {
+  flex-shrink: 0;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+@media screen and (min-width: 1024px) {
+  .footer-bottom-links {
+    position: absolute;
+    bottom: 50px;
+    width: 50%;
+  }
+}
+
+.footer-bottom-links a {
+  text-decoration: none;
+  color: #000;
+  text-transform: uppercase;
+  transition: font-weight 0.2s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.footer-bottom-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.footer-bottom-links a:hover::after {
+  width: 100%;
+}
+
+.footer-bottom-links a:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ====== RIGHT IMAGE AREA ====== */
+.dropdown-right {
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dropdown-right img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .dropdown {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .dropdown-left,
+  .dropdown-right {
+    width: 50%;
+  }
+
+  .dropdown-right {
+    height: 300px;
+  }
+}
+
+/* ======================================
+   URL BASED HEADER COLOR CONTROL
+   ====================================== */
+
+/* Header hamesha transparent */
+.custom-header-pc .navbar {
+  background: transparent !important;
+}
+
+/* URL MATCH → BLACK TEXT / ICONS */
+.header-black-url .custom-header-pc .navbar a,
+.header-black-url .custom-header-pc .navbar .nav-item a,
+.header-black-url .custom-header-pc .navbar .header__icon {
+  color: black !important;
+}
+
+.header-black-url .custom-header-pc .stroke-icon {
+  stroke: black !important;
+}
+
+.header-black-url .custom-header-pc .nav-logo {
+  filter: brightness(0) invert(0) !important;
+}
+
+.header-black-url .cart-count-bubble {
+  background: black !important;
+  color: white !important;
+}
+
+/* ===============================
+   URL BASED FIX – RIGHT SIDE NAV
+   =============================== */
+
+/* Right menu links (About, Contact, Blog etc.) */
+.header-black-url .custom-header-pc .nav-right .nav-menu li a {
+  color: black !important;
+}
+
+/* Header icons (account, cart etc.) */
+.header-black-url .custom-header-pc .nav-right .header__icon {
+  color: black !important;
+}
+
+.header-black-url .custom-header-pc .nav-right .stroke-icon {
+  stroke: black !important;
+}
+
+

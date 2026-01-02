@@ -1,169 +1,392 @@
+{% comment %}
+  Full Width Video/Image Section with Left Content
+  - Supports both video and image uploads
+  - Full width on all devices
+  - Full height on mobile
+  - Autoplay video without controls
+  - Left side content with rich text, countdown, and buttons
+{% endcomment %}
+
+<style>
+  .full-media-section {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .full-media-section__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .full-media-section__media video,
+  .full-media-section__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .full-media-section__content {
+    position: relative;
+    z-index: 2;
+    padding: 60px;
+    max-width: 600px;
+    color: #fff;
+    top: 109px;
+  }
+
+  .full-media-section__text {
+    margin-bottom: 20px;
+  }
+
+  .full-media-section__text h1,
+  .full-media-section__text h2,
+  .full-media-section__text h3 {
+    margin-bottom: 15px;
+    line-height: 1.2;
+  }
+
+  .full-media-section__text p {
+    font-size:16px !important;
+  }
+  .full-media-section__text h2 {
+    color: white;
+}
+
+  .full-media-section__countdown {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 30px 0;
+    font-family: monospace;
+    letter-spacing: 2px;
+  }
+
+  .full-media-section__buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .full-media-section__button {
+    padding: 5px 24px;
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .full-media-section__button--primary {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: 2px solid #fff;
+  }
+
+  .full-media-section__button--primary:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .full-media-section__button--secondary {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: 2px solid #fff;
+  }
+
+  .full-media-section__button--secondary:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  @media (max-width: 768px) {
+    .full-media-section {
+      min-height: 100vh;
+    }
+
+    .full-media-section__content {
+      padding: 40px 20px;
+      max-width: 100%;
+    }
+
+    .full-media-section__countdown {
+      font-size: 32px;
+    }
+
+    .full-media-section__buttons {
+      flex-direction: row;
+      flex-wrap:unset !important;
+    }
+
+    .full-media-section__button {
+      width: 50%;
+      text-align: center;
+      padding: 5px 10px;
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s 
+ease;
+    display: inline-block;
+    cursor: pointer;
+    }
+  }
+</style>
+
+<section class="full-media-section">
+  <!-- Background Video/Image -->
+  <div class="full-media-section__media">
+    {% if section.settings.media_type == 'video' and section.settings.video != blank %}
+    
+      <video 
+        class="my-video-desktop-class"
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        preload="auto"
+      >
+        <source src="{{ section.settings.video }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <video 
+        class="my-video-mobile-class"
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        preload="auto"
+      >
+        <source src="{{ section.settings.mobile-video }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    
+    {% elsif section.settings.image != blank %}
+      {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', class: 'desktop-banner-main-area' }}
+      {{ section.settings.mobile_image | image_url: width: 2000 | image_tag: loading: 'lazy', class: 'mobile-banner-main-area' }}
+    {% endif %}
+  </div>
+
+  <!-- Left Side Content -->
+  <div class="full-media-section__content">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'text' %}
+          <div class="full-media-section__text" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+          </div>
+        
+        {% when 'countdown' %}
+          <div class="full-media-section__countdown" id="countdown-{{ block.id }}" {{ block.shopify_attributes }}>
+            00D:00H:00M:00S
+          </div>
+          <script>
+            (function() {
+              var countdownElement = document.getElementById('countdown-{{ block.id }}');
+              var targetDate = new Date('{{ block.settings.countdown_date }}').getTime();
+
+              function updateCountdown() {
+                var now = new Date().getTime();
+                var distance = targetDate - now;
+
+                if (distance < 0) {
+                  countdownElement.innerHTML = "00D:00H:00M:00S";
+                  return;
+                }
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                days = days.toString().padStart(2, '0');
+                hours = hours.toString().padStart(2, '0');
+                minutes = minutes.toString().padStart(2, '0');
+                seconds = seconds.toString().padStart(2, '0');
+
+                countdownElement.innerHTML = days + "D:" + hours + "H:" + minutes + "M:" + seconds + "S";
+              }
+
+              updateCountdown();
+              setInterval(updateCountdown, 1000);
+            })();
+          </script>
+        
+        {% when 'buttons' %}
+          <div class="full-media-section__buttons" {{ block.shopify_attributes }}>
+            {% if block.settings.button_1_text != blank %}
+              <a href="{{ block.settings.button_1_link }}" class="full-media-section__button full-media-section__button--primary">
+                {{ block.settings.button_1_text }}
+              </a>
+            {% endif %}
+            {% if block.settings.button_2_text != blank %}
+              <a href="{{ block.settings.button_2_link }}" class="full-media-section__button full-media-section__button--secondary">
+                {{ block.settings.button_2_text }}
+              </a>
+            {% endif %}
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+img.mobile-banner-main-area {
+    display: none;
+}
+.my-video-mobile-class {
+  display: none;
+}
+@media (max-width: 767px) {
+  img.mobile-banner-main-area {
+    display: block !important;
+  }
+  img.desktop-banner-main-area {
+    display: none;
+  }
+  .my-video-mobile-class {
+    display: block !important;
+  }
+  .my-video-desktop-class {
+    display: none !important;
+  }
+}  
+</style>
+
 {% schema %}
 {
-  "name": "Countdown Hero Banner",
+  "name": "Full Width Media",
   "settings": [
     {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media Type",
+      "options": [
+        {
+          "value": "video",
+          "label": "Video"
+        },
+        {
+          "value": "image",
+          "label": "Image"
+        }
+      ],
+      "default": "video"
+    },
+    {
       "type": "url",
-      "id": "banner_link",
-      "label": "Banner Link",
-      "default": "/collections/all"
+      "id": "video",
+      "label": "Desktop Video URL",
+      "info": "Upload video to Shopify Files and paste URL here"
+    },
+    {
+      "type": "url",
+      "id": "mobile-video",
+      "label": "Mobile Video URL",
+      "info": "Upload video to Shopify Files and paste URL here"
     },
     {
       "type": "image_picker",
-      "id": "desktop_image",
-      "label": "Desktop Image"
+      "id": "image",
+      "label": "Image"
     },
     {
       "type": "image_picker",
       "id": "mobile_image",
-      "label": "Mobile Image"
+      "label": "Image"
     },
     {
-      "type": "text",
-      "id": "heading_small",
-      "label": "Small Heading",
-      "default": "COMING SOON"
+      "type": "url",
+      "id": "main-banner-url",
+      "label": "Main Banner URL"
     },
+  ],
+  "blocks": [
     {
       "type": "text",
-      "id": "heading_large",
-      "label": "Main Heading",
-      "default": "247 FW25 II"
+      "name": "Rich Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text Content",
+          "default": "<p>Add your text here</p>"
+        }
+      ]
     },
     {
-      "type": "text",
-      "id": "countdown_date",
-      "label": "Countdown End Date (YYYY-MM-DD HH:MM:SS)",
-      "default": "2025-12-31 23:59:59"
+      "type": "countdown",
+      "name": "Countdown Timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "countdown_date",
+          "label": "Target Date",
+          "info": "Format: YYYY-MM-DD HH:MM:SS (e.g., 2024-12-31 23:59:59)",
+          "default": "2024-12-31 23:59:59"
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_1_text",
+          "label": "Button 1 Text",
+          "default": "THE STORY"
+        },
+        {
+          "type": "url",
+          "id": "button_1_link",
+          "label": "Button 1 Link"
+        },
+        {
+          "type": "text",
+          "id": "button_2_text",
+          "label": "Button 2 Text",
+          "default": "VIEW LOOKBOOK"
+        },
+        {
+          "type": "url",
+          "id": "button_2_link",
+          "label": "Button 2 Link"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Countdown Hero Banner"
+      "name": "Full Width Media",
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "countdown"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
     }
   ]
 }
 {% endschema %}
-
-<!-- ✅ Fixed Countdown Hero Banner -->
-<div
-  x-data="countdownHero('{{ section.settings.countdown_date }}')"
-  class="countdown-hero-banner relative w-full h-screen overflow-hidden text-white"
-  data-section-id="{{ section.id }}"
->
-  <!-- ✅ Background Images -->
-  <div class="absolute inset-0">
-    <!-- Mobile Image -->
-    <img 
-      src="{{ section.settings.mobile_image | image_url: width: 800 }}" 
-      alt=""
-      class="block md:hidden w-full h-full object-cover"
-    >
-    <!-- Desktop Image -->
-    <img 
-      src="{{ section.settings.desktop_image | image_url: width: 2000 }}" 
-      alt=""
-      class="hidden md:block w-full h-full object-cover"
-    >
-  </div>
-
-  <!-- ✅ Content Overlay -->
-  <a
-    href="{{ section.settings.banner_link }}"
-    class="absolute inset-0 flex flex-col items-center justify-end text-center pb-8 md:pb-12 z-10"
-  >
-    <div class="flex flex-col gap-2 md:gap-4 max-w-4xl px-4">
-      <!-- Small Heading -->
-      <span class="text-sm md:text-base uppercase tracking-widest block">
-        {{ section.settings.heading_small }}
-      </span>
-      
-      <!-- Line Break -->
-      <br class="hidden md:block">
-      
-      <!-- Main Heading -->
-      <span class="text-2xl md:text-4xl lg:text-5xl font-bold uppercase block">
-        {{ section.settings.heading_large }}
-      </span>
-      
-      <!-- Line Break -->
-      <br class="hidden md:block">
-      
-      <!-- Countdown Timer -->
-      <div 
-        class="inline-flex gap-1 md:gap-2 font-bold uppercase text-base md:text-xl lg:text-2xl justify-center"
-        style="font-feature-settings:'tnum'; font-variant-numeric: tabular-nums;"
-      >
-        <span x-text="time().days">00</span><span>d</span>
-        <span>:</span>
-        <span x-text="time().hours">00</span><span>h</span>
-        <span>:</span>
-        <span x-text="time().minutes">00</span><span>m</span>
-        <span>:</span>
-        <span x-text="time().seconds">00</span><span>s</span>
-      </div>
-    </div>
-  </a>
-</div>
-
-<!-- ✅ Countdown Script -->
-<script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('countdownHero', (expiryString) => ({
-      expiry: new Date(expiryString.replace(' ', 'T')).getTime(),
-      remaining: 0,
-      timer: null,
-      init() {
-        this.updateTime();
-        this.timer = setInterval(() => this.updateTime(), 1000);
-      },
-      updateTime() {
-        const now = new Date().getTime();
-        this.remaining = Math.max(0, parseInt((this.expiry - now) / 1000));
-      },
-      format(num) {
-        return ('0' + parseInt(num)).slice(-2);
-      },
-      time() {
-        const days = Math.floor(this.remaining / 86400);
-        const hours = Math.floor((this.remaining % 86400) / 3600);
-        const minutes = Math.floor((this.remaining % 3600) / 60);
-        const seconds = this.remaining % 60;
-        return {
-          days: this.format(days),
-          hours: this.format(hours),
-          minutes: this.format(minutes),
-          seconds: this.format(seconds)
-        };
-      }
-    }));
-  });
-</script>
-
-<style>
-  .countdown-hero-banner {
-    min-height: 100vh;
-  }
-  
-  /* Ensure proper overlay positioning */
-  .countdown-hero-banner a {
-    text-decoration: none;
-  }
-  
-  /* Add a subtle overlay to improve text readability */
-  .countdown-hero-banner::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-    z-index: 1;
-  }
-  
-  /* Ensure text stays above the gradient overlay */
-  .countdown-hero-banner > a {
-    z-index: 2;
-  }
-</style>

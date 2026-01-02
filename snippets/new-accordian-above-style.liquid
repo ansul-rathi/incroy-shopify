@@ -1,0 +1,135 @@
+<div class="accordion-section desktop-accordion-holder">
+  <div class="accordion-item">
+    <button class="accordion-toggle" onclick="toggleAccordionUp(this)">
+      <span>Product Details</span>
+      <span class="accordion-icon">+</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content">
+        {{ product.description }}
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <button class="accordion-toggle" onclick="toggleAccordionUp(this)">
+      <span>Shipping & Returns</span>
+      <span class="accordion-icon">+</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content">
+        {{ section.settings.shipping-text }}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<style>
+.an-horizontal-shaking {
+    animation: unset !important;
+    animation-delay: unset !important;
+    transform-origin: unset !Important;
+}  
+.accordion-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 2rem;
+}
+
+.accordion-item {
+  position: relative;
+  border-top: 1px solid #e5e5e5;
+}
+
+.accordion-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 1.7rem 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accordion-icon {
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(45deg);
+}
+
+/* The panel initially hidden */
+.accordion-panel {
+  position: absolute;
+  bottom: 100%; /* Show upward */
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  z-index: 100; /* So it overlays page content */
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+  border-top: 1px solid #ddd;
+}
+
+.accordion-item.active .accordion-panel {
+    max-height: 400px;
+    padding: 1.5rem 0px;
+    overflow: scroll;
+}
+
+.accordion-content {
+    padding: 0 2.5rem;
+    overflow-y: auto;
+}
+.accordion-content > * {
+    font-size: 13px;
+}
+.accordion-item:nth-child(2n) {
+    border-top: 0;
+}
+.accordion-item:nth-child(2n) {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+@media screen and (max-width: 767px) {
+
+  .accordion-panel {
+    position: relative !important;
+    box-shadow: unset !important;
+  }
+  .accordion-item:nth-child(2n) {
+    border-top: unset !important;
+    border-bottom: unset !important;
+  } 
+  
+
+}
+
+</style>
+
+
+<script>
+  function toggleAccordionUp(button) {
+    const item = button.parentElement;
+    const openItem = document.querySelector('.accordion-item.active');
+    
+    // Close already open accordion
+    if (openItem && openItem !== item) {
+      openItem.classList.remove('active');
+    }
+
+    // Toggle current
+    item.classList.toggle('active');
+  }
+</script>

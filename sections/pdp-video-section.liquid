@@ -1,0 +1,77 @@
+{% if section.settings.custom-video != blank and section.settings.content != blank %}
+<div class="pdp-video-section-holder">
+    <div class="left-pdp-video-content">
+        <div class="left-pdp-inner-content">
+            {{ section.settings.content }}
+        </div>
+    </div>
+    <div class="right-pdp-video-only">
+        <video muted="muted" autoplay="autoplay" loop="loop" playsinline="" width="100%">
+            <source src="{{ section.settings.custom-video }}" type="video/mp4">
+            <source src="movie.ogg" type="video/ogg">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</div>
+{% endif %}
+
+<style>
+.pdp-video-section-holder {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #e8e8e8;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #e8e8e8;
+}
+.left-pdp-inner-content strong {
+    font-size: 16px;
+}
+.left-pdp-inner-content p {
+    font-size: 14px;
+}    
+.left-pdp-inner-content {
+    text-align: center;
+}
+.right-pdp-video-only video {
+    display: block;
+}
+
+@media screen and (max-width: 767px) {
+
+    .pdp-video-section-holder {
+    display: flex;
+    flex-direction: column-reverse;
+    }
+    .left-pdp-inner-content {
+    padding: 50px 30px;
+    }
+
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Pdp Video Section",
+  "class": "custom-section-class",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "text",
+      "id": "custom-video",
+      "label": "Select Video"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pdp Video Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

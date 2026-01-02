@@ -92,25 +92,7 @@
         <div class="halo-collection-content halo-grid-content sidebar--layout_{{ sidebar_type }}">
             {%- if has_sidebar -%}
                 {{ 'component-main-sidebar.css' | asset_url | stylesheet_tag }}
-                <div class="page-sidebar page-sidebar-{{ sidebar_position }} page-sidebar--{{ sidebar_type }} sidebar--{{ sidebar_layout }}{% if enable_sticky %} has-sticky{% endif %}" id="halo-sidebar">
-                    <button type="button" class="halo-sidebar-close" data-close-sidebar role="button"><span class="visually-hidden">{{ 'general.common.close' | t }}</span>{% render 'icon-close' %}</button>
-                    <div class="halo-sidebar-header text-left{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"><span class="title">{{ 'sections.sidebar.title' | t }}</span></div>
-                    <div class="halo-sidebar-wrapper custom-scrollbar{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
-                        {% render 'collection-sidebar',
-                            results: collection,
-                            section: section,
-                            sort_by: sort_by,
-                            sidebar_type: sidebar_type,
-                            show_filter: show_filter,
-                            show_sorting: show_sorting,
-                            show_collapse: sidebar_collapse,
-                            sidebar_collapse: sidebar_collapse_default,
-                            filter_swatch: filter_swatch,
-                            filter_swatch_type: filter_swatch_type,
-                            filter_rectangle: filter_rectangle
-                        %}
-                    </div>
-                </div>
+                
             {%- endif -%}
             <div class="page-content" id="CollectionProductGrid">
                 {%- if settings.layout == '4' and sidebar_type == 'horizontal' -%}
@@ -161,6 +143,30 @@
                         </div>
                     {%- endif -%}
                 {%- endfor -%}
+
+                
+                <div class="page-sidebar page-sidebar-{{ sidebar_position }} page-sidebar--{{ sidebar_type }} sidebar--{{ sidebar_layout }}{% if enable_sticky %} has-sticky{% endif %}" id="halo-sidebar">
+                    <button type="button" class="halo-sidebar-close" data-close-sidebar role="button"><span class="visually-hidden">{{ 'general.common.close' | t }}</span>{% render 'icon-close' %}</button>
+                    <div class="halo-sidebar-header text-left{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"><span class="title">{{ 'sections.sidebar.title' | t }}</span></div>
+                    <div class="halo-sidebar-wrapper custom-scrollbar{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {% render 'collection-sidebar',
+                            results: collection,
+                            section: section,
+                            sort_by: sort_by,
+                            sidebar_type: sidebar_type,
+                            show_filter: show_filter,
+                            show_sorting: show_sorting,
+                            show_collapse: sidebar_collapse,
+                            sidebar_collapse: sidebar_collapse_default,
+                            filter_swatch: filter_swatch,
+                            filter_swatch_type: filter_swatch_type,
+                            filter_rectangle: filter_rectangle
+                        %}
+                    </div>
+                </div>
+
+
+
                 {%- paginate collection.products by products_per_page -%}
                     {%- if show_toolbar -%}
                         {% render 'toolbar',

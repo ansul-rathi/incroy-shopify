@@ -1,0 +1,94 @@
+{% if product.metafields.custom.size_chart != blank %}
+
+<div class="size-chart-popup-overlay"></div>
+
+<div class="size-chart-popup">
+  <div class="size-chart-popup-content">
+    <span class="size-chart-popup-close">&times;</span>
+     <img src="{{ product.metafields.custom.size_chart | img_url: 'master' }}" />
+  </div>
+</div>
+
+{% endif %}
+
+
+<style>
+.size-chart-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: none;
+  z-index: 9998;
+}
+
+.size-chart-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 9999;
+  max-width: 400px;
+  width: 90%;
+}
+
+.size-chart-popup-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.size-chart-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 40px;
+  cursor: pointer;
+  color: #333;
+}
+
+.size-chart-popup table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.size-chart-popup table th,
+.size-chart-popup table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sizeChartButton = document.querySelector('.size-chart-button-target');
+  const popup = document.querySelector('.size-chart-popup');
+  const overlay = document.querySelector('.size-chart-popup-overlay');
+  const closeBtn = document.querySelector('.size-chart-popup-close');
+
+  if (sizeChartButton && popup && overlay) {
+    sizeChartButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+    });
+
+    const closePopup = () => {
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+    };
+
+    closeBtn.addEventListener('click', closePopup);
+    overlay.addEventListener('click', closePopup);
+  }
+});
+</script>

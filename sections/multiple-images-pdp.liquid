@@ -1,0 +1,186 @@
+
+
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
+<!-- jQuery (required for Slick) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Slick JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+
+
+<div class="multiple-prdocut-images-holder">
+    <div class="multiple-prdocut-images-holder-container">
+        
+        <h3 class="title"><span class="text">{{ section.settings.section_heading }}</span></h3>
+
+        <div class="inner-multiple-prdocut-images-holder custom-slick-slider" id="variant-image-slider">
+          <!-- Images will be injected here dynamically -->
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $('.custom-slick-slider').slick({
+      dots: false,
+      arrows: true,
+      infinite: false,
+      speed: 500,
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      autoplay: false,
+      autoplaySpeed: 3000,
+      adaptiveHeight: true,
+      responsive: [
+        {
+        breakpoint: 320,
+        settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+        },
+        },
+        {
+        breakpoint: 767,
+        settings: {
+            slidesToShow: 1.4,
+            arrows: false,
+            slidesToScroll: 1,
+        },
+        }
+    ],
+    
+    });
+  });
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const slider = document.getElementById("variant-image-slider");
+  const jsonEl = document.getElementById("variant-color-galleries");
+  const section = document.querySelector(".multiple-prdocut-images-holder");
+
+  if (!slider || !jsonEl || !section) return;
+
+  const data = JSON.parse(jsonEl.textContent);
+
+  function renderImages(variantId) {
+    const images = data[variantId];
+
+    // Hide section if no images
+    if (!images || !images.length) {
+      section.style.display = "none";
+      return;
+    }
+
+    section.style.display = "block";
+    slider.innerHTML = "";
+
+    images.forEach(url => {
+      slider.innerHTML += `
+        <div class="inner-single-image-of-product">
+          <img src="${url}" width="100%" height="100%" />
+        </div>
+      `;
+    });
+
+    // Reset slick
+    if (window.jQuery && jQuery(slider).hasClass("slick-initialized")) {
+      jQuery(slider).slick("unslick");
+    }
+
+    jQuery(slider).slick({
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      arrows: true,
+      dots: false,
+      infinite: false,
+      adaptiveHeight: true,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: { slidesToShow: 2 }
+        },
+        {
+          breakpoint: 640,
+          settings: { slidesToShow: 2 }
+        }
+      ]
+    });
+  }
+
+  // Listen for ANY variant change
+  document.addEventListener("change", function (e) {
+    const form = e.target.closest('form[action*="/cart/add"]');
+    if (!form) return;
+
+    const input = form.querySelector('[name="id"]');
+    if (input) renderImages(input.value);
+  });
+
+  // Load on page open
+  const firstVariant = document.querySelector('form[action*="/cart/add"] [name="id"]')?.value;
+  if (firstVariant) renderImages(firstVariant);
+});
+</script>
+
+
+
+
+<Style>
+.multiple-prdocut-images-holder-container h3 {
+    text-align: center;
+    padding-top: 50px;
+    text-transform: uppercase;
+}
+.inner-multiple-prdocut-images-holder {
+    padding: 50px 0 0px 0 !important;
+}    
+.inner-multiple-prdocut-images-holder button.slick-next.slick-arrow {
+    right: 20px !important;
+}
+.inner-multiple-prdocut-images-holder button.slick-prev {
+    left: 20px !important;
+}
+</Style>
+
+
+{% schema %}
+{
+  "name": "Multiple Images",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading",
+      "default": "This is the main heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Block Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Block Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multiple Images",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

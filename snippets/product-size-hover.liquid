@@ -3,7 +3,12 @@
 <div class="product-size-wrapper" data-product-id="{{ product.id }}">
   <!-- Plus Icon -->
   <div class="show-sizes-icon">
-    <span>+</span>
+    <svg class="icon-plus" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
   </div>
 
   <!-- Size Bar -->
@@ -13,23 +18,550 @@
         {%- assign downcased_option = option.name | downcase -%}
         {%- if downcased_option contains 'size' -%}
           {%- for value in option.values -%}
-            {%- assign variant = product.variants | where: 'option1', value | first -%}
-            {%- if variant and variant.available -%}
-              <li class="size-item">
-                <button 
-                  type="button" 
-                  class="add-to-cart-size-btn" 
-                  data-variant-id="{{ variant.id }}">
-                  {{ value }}
-                </button>
-              </li>
-            {%- endif -%}
+            {%- for variant in product.variants -%}
+              {%- if variant.option1 == value or variant.option2 == value or variant.option3 == value -%}
+                {%- if variant.available -%}
+                  <li class="size-item">
+                    <button 
+                      type="button" 
+                      class="add-to-cart-size-btn" 
+                      data-variant-id="{{ variant.id }}"
+                      data-size="{{ value }}"
+                      data-product-title="{{ product.title | escape }}"
+                      data-product-image="{{ variant.image.src | default: product.featured_image.src | img_url: '100x' }}"
+                      data-product-price="{{ variant.price | money }}">
+                      {{ value }}
+                    </button>
+                  </li>
+                  {%- break -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
           {%- endfor -%}
         {%- endif -%}
       {%- endfor -%}
     </ul>
-    <span class="added-msg" style="display:none;">✓ Added!</span>
+  </div>
+</div>
+
+<!-- Success Notification -->
+<div class="add-to-cart-notification" aria-live="polite">
+  <div class="notification-content">
+    <div class="notification-image">
+      <img src="" alt="" id="notification-product-image">
+    </div>
+    <div class="notification-details">
+      <p class="notification-message">Product added to cart</p>
+      <p class="notification-product" id="notification-product-title"></p>
+      <p class="notification-size" id="notification-product-size"></p>
+    </div>
+    <button class="notification-close" aria-label="Close notification">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
   </div>
 </div>
 {%- endif -%}
 
+<style>
+  /* Container at bottom-right */
+  .product-size-wrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  /* Plus Icon */
+  .show-sizes-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #fff;
+    color: #000;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .show-sizes-icon:hover {
+    background: #f5f5f5;
+  }
+
+  .show-sizes-icon .icon-plus {
+    display: block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .show-sizes-icon .icon-close {
+    display: none;
+    position: absolute;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Active state - rotate plus to cross */
+  .show-sizes-icon.active .icon-plus {
+    transform: rotate(45deg);
+    opacity: 0;
+  }
+
+  .show-sizes-icon.active .icon-close {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Size Bar */
+  .sizes-popup {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 12px 16px;
+    display: none;
+    z-index: 2;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+  }
+
+  .sizes-popup.active {
+    display: block;
+  }
+
+  /* Size List */
+  .sizes-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #ddd #f5f5f5;
+  }
+
+  .sizes-list::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .sizes-list::-webkit-scrollbar-track {
+    background: #f5f5f5;
+  }
+
+  .sizes-list::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 3px;
+  }
+
+  .sizes-list::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+  }
+
+  .size-item {
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  /* Size Buttons */
+  .add-to-cart-size-btn {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    color: #000;
+    padding: 10px 16px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .add-to-cart-size-btn:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  .add-to-cart-size-btn:active {
+    transform: scale(0.95);
+  }
+
+  .add-to-cart-size-btn.selected {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  .add-to-cart-size-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Success Notification */
+  .add-to-cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    max-width: 320px;
+    z-index: 1000;
+    display: none;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    border-left: 4px solid #10b981;
+  }
+
+  .add-to-cart-notification.active {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .notification-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .notification-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .notification-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .notification-details {
+    flex: 1;
+  }
+
+  .notification-message {
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: #10b981;
+  }
+
+  .notification-product,
+  .notification-size {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .notification-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    transition: color 0.2s ease;
+  }
+
+  .notification-close:hover {
+    color: #000;
+  }
+
+  /* Desktop - Hover */
+  @media (min-width: 769px) {
+    .product-size-wrapper:hover .sizes-popup {
+      display: block;
+    }
+
+    .product-size-wrapper:hover .show-sizes-icon {
+      display: none;
+    }
+  }
+
+  /* Mobile - Click */
+  @media (max-width: 768px) {
+    .sizes-popup {
+      padding: 10px 12px;
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .sizes-list {
+      justify-content: flex-start;
+      gap: 8px;
+      padding-bottom: 4px;
+    }
+    
+    .add-to-cart-size-btn {
+      padding: 8px 14px;
+      font-size: 12px;
+      min-width: 40px;
+    }
+    
+    /* Scroll hint */
+    .sizes-list::after {
+      content: '';
+      display: block;
+      width: 8px;
+      flex-shrink: 0;
+    }
+    
+    /* Notification on mobile */
+    .add-to-cart-notification {
+      top: 10px;
+      right: 10px;
+      left: 10px;
+      max-width: none;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let isAdding = false;
+  
+  // Plus icon click - Mobile only
+  document.querySelectorAll('.show-sizes-icon').forEach((icon) => {
+    icon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      const wrapper = this.closest('.product-size-wrapper');
+      const popup = wrapper.querySelector('.sizes-popup');
+      const isActive = popup.classList.contains('active');
+      
+      // Close all other popups first
+      document.querySelectorAll('.sizes-popup.active').forEach((p) => {
+        p.classList.remove('active');
+      });
+      document.querySelectorAll('.show-sizes-icon.active').forEach((i) => {
+        i.classList.remove('active');
+      });
+      
+      // Toggle this popup
+      if (!isActive) {
+        popup.classList.add('active');
+        this.classList.add('active');
+      }
+    });
+  });
+  
+  // Close notification
+  document.querySelectorAll('.notification-close').forEach((btn) => {
+    btn.addEventListener('click', function() {
+      const notification = this.closest('.add-to-cart-notification');
+      notification.classList.remove('active');
+    });
+  });
+  
+  // Close on outside click (mobile only)
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768) {
+      if (!e.target.closest('.product-size-wrapper')) {
+        document.querySelectorAll('.sizes-popup.active').forEach((popup) => {
+          popup.classList.remove('active');
+        });
+        document.querySelectorAll('.show-sizes-icon.active').forEach((icon) => {
+          icon.classList.remove('active');
+        });
+      }
+    }
+  });
+  
+  // Add to cart with size
+  document.querySelectorAll('.add-to-cart-size-btn').forEach((btn) => {
+    btn.addEventListener('click', async function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (isAdding || this.disabled) return;
+      
+      isAdding = true;
+      this.disabled = true;
+      
+      const variantId = this.dataset.variantId;
+      const size = this.dataset.size;
+      const productTitle = this.dataset.productTitle;
+      const productImage = this.dataset.productImage;
+      const productPrice = this.dataset.productPrice;
+      
+      this.classList.add('selected');
+      
+      console.log('Adding to cart - Variant ID:', variantId, 'Size:', size);
+
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ 
+            id: variantId,
+            quantity: 1
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add to cart');
+        }
+
+        const data = await response.json();
+        console.log('✅ Added to cart:', data);
+
+        showSuccessNotification(productTitle, size, productImage, productPrice);
+        
+        // Close popup on mobile
+        if (window.innerWidth <= 768) {
+          setTimeout(() => {
+            const popup = this.closest('.sizes-popup');
+            const icon = this.closest('.product-size-wrapper').querySelector('.show-sizes-icon');
+            if (popup) {
+              popup.classList.remove('active');
+            }
+            if (icon) {
+              icon.classList.remove('active');
+            }
+          }, 300);
+        }
+        
+        await refreshAndOpenCart();
+        
+        setTimeout(() => {
+          this.classList.remove('selected');
+          this.disabled = false;
+          isAdding = false;
+        }, 500);
+
+      } catch (error) {
+        console.error('❌ Error adding to cart:', error);
+        alert('Could not add to cart. Please try again.');
+        this.classList.remove('selected');
+        this.disabled = false;
+        isAdding = false;
+      }
+    });
+  });
+  
+  async function refreshAndOpenCart() {
+    try {
+      const cartResponse = await fetch('/cart.js');
+      const cart = await cartResponse.json();
+      console.log('Cart updated:', cart);
+      
+      updateCartCount(cart.item_count);
+      
+      const sectionsResponse = await fetch('/?sections=cart-drawer,cart-icon-bubble');
+      const sections = await sectionsResponse.json();
+      
+      if (sections['cart-drawer']) {
+        const cartDrawerEl = document.querySelector('cart-drawer');
+        if (cartDrawerEl) {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = sections['cart-drawer'];
+          const newContent = tempDiv.querySelector('cart-drawer');
+          if (newContent) {
+            cartDrawerEl.innerHTML = newContent.innerHTML;
+          }
+        }
+      }
+      
+      if (sections['cart-icon-bubble']) {
+        const cartIconBubble = document.querySelector('#cart-icon-bubble');
+        if (cartIconBubble) {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = sections['cart-icon-bubble'];
+          const newBubble = tempDiv.querySelector('#cart-icon-bubble');
+          if (newBubble) {
+            cartIconBubble.innerHTML = newBubble.innerHTML;
+          }
+        }
+      }
+      
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+      document.dispatchEvent(new CustomEvent('cart:refresh'));
+      
+      setTimeout(() => openCartDrawer(), 100);
+      
+    } catch (error) {
+      console.error('Error refreshing cart:', error);
+      openCartDrawer();
+    }
+  }
+  
+  function openCartDrawer() {
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer) {
+      if (typeof cartDrawer.open === 'function') {
+        cartDrawer.open();
+      } else {
+        cartDrawer.classList.add('active', 'animate', 'is-open');
+      }
+    }
+    
+    document.dispatchEvent(new CustomEvent('cart:open'));
+    
+    const cartIcon = document.querySelector('#cart-icon-bubble, .header__icon--cart, [data-cart-drawer]');
+    if (cartIcon && !cartDrawer) {
+      cartIcon.click();
+    }
+  }
+  
+  function updateCartCount(count) {
+    const selectors = [
+      '.cart-count',
+      '.cart-counter', 
+      '[data-cart-count]',
+      '.cart-count-bubble',
+      '#cart-icon-bubble',
+      '.header__icon--cart .cart-count',
+      'cart-notification .cart-count',
+      '.cart-drawer__count'
+    ];
+    
+    selectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => {
+        if (el) {
+          el.textContent = count;
+          el.classList.remove('hidden');
+        }
+      });
+    });
+  }
+  
+  function showSuccessNotification(productTitle, size, productImage, productPrice) {
+    const notification = document.querySelector('.add-to-cart-notification');
+    const productTitleEl = document.getElementById('notification-product-title');
+    const productSizeEl = document.getElementById('notification-product-size');
+    const productImageEl = document.getElementById('notification-product-image');
+    
+    if (!notification || !productTitleEl || !productSizeEl || !productImageEl) return;
+    
+    productTitleEl.textContent = productTitle;
+    productSizeEl.textContent = `Size: ${size}`;
+    productImageEl.src = productImage;
+    productImageEl.alt = productTitle;
+    
+    notification.classList.add('active');
+    
+    setTimeout(() => {
+      notification.classList.remove('active');
+    }, 4000);
+  }
+});
+
+</script>

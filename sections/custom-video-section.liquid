@@ -1,0 +1,83 @@
+<div class="custom-video-section-here hero-video-wrapper-custom">
+    <div class="desktop-video-holder-here">
+        {{ section.settings.desktop-video-url | video_tag:
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            preload: "auto",
+            fetchpriority: "high"
+        }}
+    </div>
+    <div class="mobile-video-holder-here" style="display: none;">
+        {{ section.settings.mobile-video-url | video_tag:
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            preload: "auto",
+            fetchpriority: "high"
+        }}
+    </div>
+</div>
+
+<style>
+
+.hero-video-wrapper-custom {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+    font-size: 0px;
+}
+
+.hero-video-wrapper-custom video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+}
+
+    
+@media (max-width: 767px) {
+    .mobile-video-holder-here {
+        display: block !important;
+    }
+    .hero-video-wrapper-custom {
+    height: 100vh !important;
+    }
+    .desktop-video-holder-here {
+        display: none;
+    }
+}
+
+</style>
+
+
+
+{% schema %}
+{
+  "name": "Custom Video Section",
+  "tag": "section",
+  "class": "spaced-section",
+  "settings": [
+    {
+      "type": "video",
+      "id": "desktop-video-url",
+      "label": "Desktop Video"
+    },
+    {
+      "type": "video",
+      "id": "mobile-video-url",
+      "label": "Mobile Video"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Video Section"
+    }
+  ]
+}
+{% endschema %}
+
+

@@ -56,6 +56,17 @@
         <h2 class="footer-block__heading">{{- social_heading | escape -}}</h2>       
     {%- endif -%}
     <div class="item clearfix">{% render 'halo-social-media-icons' %}</div>  
+    
+    <div class="payment-accepted-div">
+        <h2 class="footer-block__heading">Payment Accepted</h2>
+        <div class="inner-payment-accepted-div">
+            <img src="https://cdn.shopify.com/s/files/1/0702/2493/7184/files/1.png?v=1762579980" />
+            <img src="https://cdn.shopify.com/s/files/1/0702/2493/7184/files/2.png?v=1762579977" />
+            <img src="https://cdn.shopify.com/s/files/1/0702/2493/7184/files/3.png?v=1762579973" />
+            <img src="https://cdn.shopify.com/s/files/1/0702/2493/7184/files/4.png?v=1762579971" />
+        </div>
+    </div>
+
 </div>
 {%- if show_payment and social_is_nested == false -%}
     {% render 'footer-payment', block: block %}

@@ -29,6 +29,28 @@
     {% render 'product-page-step-by-step' %}
 {% endif %}
 
+<div class="json-div-with-details">
+
+<script type="application/json" id="variant-color-galleries">
+{
+  {% for variant in product.variants %}
+    "{{ variant.id }}": [
+      {% assign gallery = variant.metafields.custom.color_gallery.value %}
+      {% if gallery and gallery.images.value %}
+        {% for img in gallery.images.value %}
+          "{{ img.src | image_url: width: 1200 }}"{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      {% endif %}
+    ]{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+}
+</script>
+
+
+
+
+</div>
+
 {% schema %}
 {
     "name": "t:sections.main-product.name",
@@ -73,6 +95,16 @@
             "id": "show_sticky_info",
             "label": "t:sections.main-product.settings.general.label__1",
             "default": true
+        },
+        {
+            "type": "richtext",
+            "id": "shipping-text",
+            "label": "Shipping Text"
+        },
+        {
+            "type": "image_picker",
+            "id": "size-chart-image",
+            "label": "Size Chart Image"
         },
         {
             "type": "header",

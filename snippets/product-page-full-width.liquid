@@ -538,6 +538,45 @@
                                                             {%- if settings.enable_lazyload and forloop.index > 1 -%}<span class="data-lazy-loading"></span>{%- endif -%}
                                                         </div>
                                                     </div>
+                                                    
+                                                    <div class="productView-image-counter">
+                                                        <span class="current">1</span> / <span class="total">{{ product.media.size }}</span>
+                                                    </div>
+                                                    <script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Adjust this selector to your real Slick container
+  var $slider = $('.productView-images'); 
+  var $counter = $('.productView-image-counter');
+  var $current = $counter.find('.current');
+  var $total = $counter.find('.total');
+
+  // Ensure total count is correct
+  $total.text($slider.find('.productView-image').length);
+
+  // When Slick initializes
+  $slider.on('init', function(event, slick){
+    $current.text(slick.currentSlide + 1);
+    $total.text(slick.slideCount);
+  });
+
+  // When the slide changes
+  $slider.on('afterChange', function(event, slick, currentSlide){
+    $current.text(currentSlide + 1);
+  });
+
+  // Initialize Slick if not already initialized
+  if (!$slider.hasClass('slick-initialized')) {
+    $slider.slick({
+      arrows: true,
+      dots: false,
+      infinite: false,
+      adaptiveHeight: true
+    });
+  }
+});
+</script>
+
+
                                                 </div>
                                             {%- when 'external_video' -%}
                                                 {%- if video_layout == 'thumbnail' -%}
@@ -812,16 +851,26 @@
                                             %}
                                         </div>
                                     {%- when 'title' -%}
-                                        <div class="productView-moreItem{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger {% if share_layout == '3' %}animate--fade-in{% else %}animate--slide-in{% endif %}{% endif %}"
+                                        <div class="title-and-price-both-block productView-moreItem{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger {% if share_layout == '3' %}animate--fade-in{% else %}animate--slide-in{% endif %}{% endif %}"
                                             style="--spacing-top: {{ spacing_top | append: 'px' }};
                                             --spacing-bottom: {{ spacing_bottom | append: 'px' }}"
                                         >
+                                            
                                             {% render 'product-title',
                                                 block: block,
                                                 product: product,
                                                 check_show_share: check_show_share,
                                                 share_layout: check_show_share
                                             %}
+                                            
+                                            <div class="productView-price no-js-hidden clearfix" id="product-price-{{ product.id }}">
+                                                {%- render 'price',
+                                                    product: product,
+                                                    use_variant: true,
+                                                    price_class: 'price--medium'
+                                                -%}
+                                            </div>
+
                                         </div>
                                     {%- when 'meta' -%}
                                         {%- liquid 
@@ -924,7 +973,7 @@
                                                     </span>
                                                 </div>
                                             {% else %}
-                                                <div class="productView-price no-js-hidden clearfix" id="product-price-{{ product.id }}">
+                                                <div class="main-price-location-block productView-price no-js-hidden clearfix" id="product-price-{{ product.id }}">
                                                     {%- render 'price',
                                                         product: product,
                                                         use_variant: true,
@@ -980,6 +1029,7 @@
                                                     picker_type: picker_type,
                                                     show_variant_image_group: show_variant_image_group
                                                 %}
+                                                {% render 'size-chart-popup' %}
                                             </div>
                                         {% endunless %}
                                     {%- when 'customization_property' -%}
@@ -1482,6 +1532,9 @@
                                     %}
                                 {%- endif -%}
                             {%- endif -%}
+                        </div>
+                        <div class="accordians-div-holder">
+                           {% render 'new-accordian-above-style' %}
                         </div>
                     </div>
                 </div>

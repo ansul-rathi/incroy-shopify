@@ -1,3 +1,15 @@
+{% if product.tags contains 'New' %}
+<div class="custom-class-for-new-badge {{ class }}{% if sale_badge_type == 'discount' or sale_badge_type == 'text_discount' %} has-badge-js{% endif %} badge-{{ position }} halo-productBadges halo-productBadges--{{ position }} date-{{ date_minus }} date1-{{ date_difference }}{% unless sale_badge %} sale_badge_disable{% endunless %}">
+    <span class="badge new-badge" aria-hidden="true">New</span>
+</div>                
+{% endif %}
+
+<style>
+.custom-class-for-new-badge {
+    right: 0;
+}    
+</style>
+
 {%- liquid
     assign position = settings.badge_postion
 
@@ -68,7 +80,7 @@
     endif
 -%}
 {%- if sale_badge or sold_out_badge or custom_badge or bundle_badge or new_badge -%}
-    <div class="{{ class }}{% if sale_badge_type == 'discount' or sale_badge_type == 'text_discount' %} has-badge-js{% endif %} badge-{{ position }} halo-productBadges halo-productBadges--{{ position }} date-{{ date_minus }} date1-{{ date_difference }}{% unless sale_badge %} sale_badge_disable{% endunless %}"
+    <div style="display: none;" class="{{ class }}{% if sale_badge_type == 'discount' or sale_badge_type == 'text_discount' %} has-badge-js{% endif %} badge-{{ position }} halo-productBadges halo-productBadges--{{ position }} date-{{ date_minus }} date1-{{ date_difference }}{% unless sale_badge %} sale_badge_disable{% endunless %}"
         {% if sale_badge_type == 'text_discount' or sale_badge_type == 'text' %}data-text-sale-badge="{{ 'products.product.on_sale' | t }}"{% endif %}
         {% if sale_badge_type == 'discount' %}data-text-sale-badge="- "{% endif %}
         data-new-badge-number="{{ new_badge_limit }}"

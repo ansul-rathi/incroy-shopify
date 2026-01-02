@@ -2,12 +2,11 @@
 <noscript>{{ 'component-menu-mobile.css' | asset_url | stylesheet_tag }}</noscript>
 
 {%-liquid
-    if request.page_type == 'index'
-        if section.settings.enable_transparent
-            assign header_transparent = ' header-mobile--transparent'
-            assign sticky_header = ' p-absolute left-0 right-0 w-100 zi-3'
-        endif
-    endif
+  if section.settings.enable_transparent
+    assign header_transparent = ' header-mobile--transparent'
+    assign sticky_header = ' p-absolute left-0 right-0 w-100 zi-3'
+endif
+
 -%}
 
 <{% if section.settings.sticky_header_type != 'none' %}sticky-header-mobile data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-mobile{{sticky_header}}{{header_transparent}}" style="--bg-color: {% if section.settings.gradient != blank %}{{ section.settings.gradient }}{% else %}{{ section.settings.background }}{% endif %}; --p-top: {{ section.settings.padding_top }}px; --p-bottom: {{ section.settings.padding_bottom }}px; --color-transparent: {{section.settings.transparent_color}}; --color-border-transparent: {{section.settings.transparent_border_color}};">
@@ -88,11 +87,12 @@
                                 {% else %}
                                     <a href="{{ routes.root_url }}" class="header__heading-link focus-inset 2" data-logo-width="{{ block.settings.logo_width_mobile }}" style="--width-logo-mb: {{ block.settings.logo_width_mobile | append: 'px'}};">
                                         {%- liquid 
-                                            assign logo_transparent = block.settings.logo_transparent
-                                            assign check_transparent = false
-                                            if request.page_type == 'index' and section.settings.enable_transparent and logo_transparent != blank
-                                                assign check_transparent = true
-                                            endif
+                                           assign logo_transparent = block.settings.logo_transparent
+assign check_transparent = false
+if section.settings.enable_transparent and logo_transparent != blank
+    assign check_transparent = true
+endif
+
                                         -%}
                                         {%- if block.settings.logo_mobile != blank -%}
                                             {%- assign logo = block.settings.logo_mobile -%}

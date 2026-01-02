@@ -21,11 +21,22 @@
                             assign option_index = forloop.index0
                         -%}
                         <fieldset class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix" data-product-attribute="set-rectangle" data-option-index="{{ forloop.index0 }}">
-                            <legend class="form__label">
-                                {{ option.name | append: ':' }}
-                                <span data-header-option>
-                                    {{ option.selected_value }}
-                                </span>
+                            <legend class="form__label {% if is_swatch == false %}flex-label-if-have-size-button{% endif %}">
+                                <div class="label-heading-value-of-variant">
+                                    {{ option.name | append: ':' }}
+                                    <span data-header-option>
+                                        {{ option.selected_value }}
+                                    </span>
+                                </div>
+
+                                {% if product.metafields.custom.size_chart != blank %}
+                                    <div class="size-chart-button">
+                                        {% if is_swatch == false %}
+                                            <a href="" class="size-chart-button-target">Size Chart</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
                             </legend>
                             {%- assign values = '' -%}
                             {%- liquid

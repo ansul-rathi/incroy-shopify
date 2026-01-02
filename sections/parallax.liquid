@@ -1,0 +1,516 @@
+{% comment %}
+  Custom Parallax Hero Section - Scroll Based
+  Features:
+  - Sections stack vertically
+  - Fixed heading navigation
+  - Active heading changes on scroll
+  - Click heading to jump to section
+{% endcomment %}
+
+<div class="parallax-hero-wrapper" id="parallax-section-{{ section.id }}">
+  <!-- Stacked Sections -->
+  <div class="parallax-sections">
+    {% for block in section.blocks %}
+      <div 
+        class="parallax-section" 
+        id="section-{{ forloop.index }}"
+        data-index="{{ forloop.index }}"
+      >
+        <div class="parallax-media">
+          {% if block.settings.video != blank %}
+            <!-- Video -->
+            <video 
+              class="parallax-video"
+              autoplay
+              loop
+              muted
+              playsinline
+              data-video-index="{{ forloop.index }}"
+            >
+              {% for source in block.settings.video.sources %}
+                <source src="{{ source.url }}" type="{{ source.mime_type }}">
+              {% endfor %}
+            </video>
+          {% elsif block.settings.image != blank %}
+            <a href="{{ block.settings.main-image-link }}">
+            <!-- Image -->
+            <img 
+              src="{{ block.settings.image | img_url: '2000x' }}"
+              srcset="
+                {{ block.settings.image | img_url: '500x' }} 500w,
+                {{ block.settings.image | img_url: '800x' }} 800w,
+                {{ block.settings.image | img_url: '1200x' }} 1200w,
+                {{ block.settings.image | img_url: '1600x' }} 1600w,
+                {{ block.settings.image | img_url: '2000x' }} 2000w
+              "
+              sizes="100vw"
+              alt="{{ block.settings.heading }}"
+              class="parallax-image desktop-banner-main-area"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            >
+
+            <img 
+              src="{{ block.settings.image | img_url: '2000x' }}"
+              srcset="
+                {{ block.settings.mobile_image | img_url: '500x' }} 500w,
+                {{ block.settings.mobile_image | img_url: '800x' }} 800w,
+                {{ block.settings.mobile_image | img_url: '1200x' }} 1200w,
+                {{ block.settings.mobile_image | img_url: '1600x' }} 1600w,
+                {{ block.settings.mobile_image | img_url: '2000x' }} 2000w
+              "
+              sizes="100vw"
+              alt="{{ block.settings.heading }}"
+              class="parallax-image mobile-banner-main-area"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            >  
+            </a>
+            
+          {% else %}
+            <!-- Placeholder -->
+            <div class="parallax-placeholder">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {% endif %}
+          
+          {% if block.settings.link != blank %}
+            <a href="{{ block.settings.link }}" class="parallax-overlay-link" aria-label="{{ block.settings.heading }}"></a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- Fixed Navigation - Inside sections container -->
+    <div class="parallax-fixed-nav">
+      <div class="parallax-nav-content">
+        {% if section.settings.main_heading != blank %}
+          <h2 class="parallax-main-title">{{ section.settings.main_heading }}</h2>
+        {% endif %}
+
+        <div class="parallax-headings">
+          {% for block in section.blocks %}
+            <h3>
+              <button 
+                type="button"
+                class="parallax-heading-btn {% if forloop.first %}active{% endif %}"
+                data-target="section-{{ forloop.index }}"
+                data-index="{{ forloop.index }}"
+              >
+                {{ block.settings.heading | default: 'Section ' }}
+              </button>
+            </h3>
+          {% endfor %}
+        </div>
+
+        <div class="parallax-cta">
+          {% for block in section.blocks %}
+            {% if block.settings.link != blank %}
+              <a 
+                href="{{ block.settings.link }}" 
+                class="parallax-discover-btn {% if forloop.first %}active{% endif %}"
+                data-index="{{ forloop.index }}"
+              >
+                <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 4.74256L10.5879 4.70898" stroke="currentColor" stroke-width="1.00713" stroke-miterlimit="10"/>
+                  <path d="M7.19043 1L10.8128 4.76332" stroke="currentColor" stroke-width="1.00713" stroke-miterlimit="10"/>
+                  <path d="M11.0511 4.29297L7.19043 8.30136" stroke="currentColor" stroke-width="1.00713" stroke-miterlimit="10"/>
+                </svg>
+                Discover
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const container = document.querySelector('#parallax-section-{{ section.id }}');
+    const sections = container.querySelectorAll('.parallax-section');
+    const headingBtns = container.querySelectorAll('.parallax-heading-btn');
+    const discoverBtns = container.querySelectorAll('.parallax-discover-btn');
+    const videos = container.querySelectorAll('.parallax-video');
+    
+    let currentIndex = 1;
+    let ticking = false;
+
+    function updateActiveSection(index) {
+      if (index === currentIndex) return;
+      
+      // Update headings
+      headingBtns.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index - 1);
+      });
+      
+      // Update discover buttons
+      discoverBtns.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index - 1);
+      });
+      
+      // Handle videos
+      videos.forEach((video, i) => {
+        if (i === index - 1) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+      
+      currentIndex = index;
+    }
+
+    // Scroll detection with Intersection Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '-40% 0px -40% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const index = parseInt(entry.target.dataset.index);
+          updateActiveSection(index);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+    // Heading button click - smooth scroll to section
+    headingBtns.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        const targetSection = document.getElementById(btn.dataset.target);
+        if (targetSection) {
+          targetSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      });
+    });
+
+    // Initialize first video
+    if (videos.length > 0) {
+      videos[0].play().catch(() => {});
+    }
+
+    // Show/hide fixed nav only when parallax wrapper is in view
+    const parallaxWrapper = container;
+    const fixedNav = container.querySelector('.parallax-fixed-nav');
+
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            fixedNav.classList.remove('hidden');
+          } else {
+            fixedNav.classList.add('hidden');
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    visibilityObserver.observe(parallaxWrapper);
+  })();
+</script>
+
+<style>
+.parallax-hero-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.parallax-sections {
+  position: relative;
+  width: 100%;
+}
+
+.parallax-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.parallax-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.parallax-video,
+.parallax-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.parallax-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parallax-placeholder svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.parallax-overlay-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Fixed Navigation - Sticky within sections */
+.parallax-fixed-nav {
+  position: fixed;
+  top: 84%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  pointer-events: none;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+  transition: opacity 0.4s ease;
+}
+
+.parallax-fixed-nav.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.parallax-nav-content {
+  text-align: center;
+  color: white;
+  pointer-events: auto;
+}
+
+.parallax-main-title {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.parallax-headings {
+  margin: 30px 0;
+}
+
+.parallax-headings h3 {
+  margin: 0;
+  padding: 0;
+}
+
+.parallax-heading-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -1.5px;
+  line-height: 1.2;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+  display: block;
+  margin: 5px auto;
+  padding: 8px 15px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  width: 100%;
+}
+
+.parallax-heading-btn:hover {
+  opacity: 0.6;
+}
+
+.parallax-heading-btn.active {
+  opacity: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+}
+
+.parallax-cta {
+  margin-top: 40px;
+  position: relative;
+  height: 40px;
+}
+
+.parallax-discover-btn {
+  position: absolute;
+  left: 60px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  border: 1px solid white;
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.parallax-discover-btn.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.parallax-discover-btn:hover {
+  background: white;
+  color: black;
+}
+
+.parallax-discover-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.parallax-discover-btn:hover svg {
+  transform: translateX(3px);
+}
+
+@media (min-width: 1024px) {
+  .parallax-heading-btn {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .parallax-heading-btn {
+    font-size: 24px;
+  }
+  
+  .parallax-main-title {
+    font-size: 10px;
+  }
+
+  .parallax-fixed-nav {
+    max-width: 100%;
+        position: fixed;
+        top: 75%;
+        left: 23%;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+        pointer-events: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .parallax-heading-btn {
+    font-size: 20px;
+    padding: 5px 10px;
+  }
+
+  .parallax-cta {
+    margin-top: 30px;
+  }
+
+  .parallax-discover-btn {
+    font-size: 10px;
+    padding: 8px 16px;
+  }
+    .parallax-fixed-nav {
+    max-width: 100%;
+        position: fixed;
+        top: 75%;
+        left: 23%;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+        pointer-events: none;
+  }
+}
+</style>
+
+<script>
+  // Set CSS variable for total sections
+  document.documentElement.style.setProperty('--total-sections', {{ section.blocks.size }});
+</script>
+
+{% schema %}
+{
+  "name": "Parallax Hero Scroll",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Explore Collections"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Section",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Collection Name"
+        },
+        {
+          "type": "url",
+          "id": "main-image-link",
+          "label": "Main Image Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Upload video directly from Shopify CDN"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parallax Hero Scroll",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

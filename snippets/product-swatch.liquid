@@ -109,6 +109,23 @@
             {%- if count > number_limit -%}
                 <li class="item-swatch-more item"><button type="button" class="number-showmore" title="More Color"><span>+</span> <span class="text-number">{{ count | minus : number_limit }}</span></button></li>
             {%- endif -%}
+
+
+            
+
+
         </ul>
     </div>
 {%- endif -%}
+
+
+{% assign color_count = 0 %}
+{% for option in product.options_with_values %}
+{% if option.name contains 'Color' or option.name contains 'Colour' %}
+{% assign color_count = option.values.size %}
+{% endif %}
+{% endfor %}
+
+{% if color_count > 0 %}
+<p class="variant-count-text-only">{{ color_count }} Colors</p>
+{% endif %}

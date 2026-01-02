@@ -1,0 +1,170 @@
+@media screen and (min-width: 1200px) {
+
+
+.productView-top {
+    height: 100vh;
+    align-items: center !important;
+}
+.productView-img-container {
+    height: 100vh;
+}
+.productView-image.fit-unset .productView-img-container img:not(.zoomImg) {
+    height: 100%!important;
+    width: 100%!important;
+    object-fit: contain !important;
+    background-color: #ECECEC;
+}
+
+
+.template-product .product-details.product-full-width .productView-container {
+    max-width: 100%;
+    padding: 0;
+}
+.template-product .product-details.product-full-width .productView-container .halo-productView-left.productView-images {
+    padding: 0;
+    width: 50%;
+    margin: 0;
+}
+.template-product .product-details .productView-container .productView-top .halo-productView-right {
+    width: 50% !important;
+    padding: 4% 8%;
+}
+.template-product .product-details.product-full-width .productView-container .halo-productView-right.productView-details .productView-buttons .productView-action {
+    margin: 0;
+}
+
+/* Header css */
+
+/* .template-product header.navbar {
+    position: static;
+} */
+.template-product header.navbar .nav-center a img {
+    filter: unset !important;
+}
+.template-product header.navbar li a {
+    color: #000 !important;
+}
+.halo-productView-left .productView-image-wrapper .productView-nav .slick-arrow.slick-prev {
+    left: 20px !important;
+}
+.halo-productView-left .productView-image-wrapper .productView-nav .slick-arrow.slick-next {
+    right: 20px !important;
+}
+
+/* End Header css Here */
+
+
+}
+
+
+.template-product .productView-container .productView-buttons .productView-groupBottom {
+    margin-top: 15px;
+}
+.template-product .productView-container .halo-productView-right variant-radios fieldset:not(.product-form__swatch) .product-form__label span {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.template-product .productView-container .halo-productView-right variant-radios .product-form__input .product-form__label {
+    margin-right: unset !important;
+}
+.main-price-location-block {
+    display: none;
+}
+.title-and-price-both-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.title-and-price-both-block.productView-moreItem .productView-title span {
+    font-size: 18px;
+}
+.title-and-price-both-block.productView-moreItem .productView-price .price__regular span {
+    font-size: 16px !important;
+}
+.productView-thumbnail .productView-thumbnail-link img {
+    object-fit: cover !important;
+}
+.halo-recommendations-block .halo-block-header {
+    border: unset !Important;
+}
+.template-product .productView-container product-form.productView-form .productView-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.template-product .productView-container .productView.halo-productView {
+    padding-bottom: 0;
+}
+.productView-container .productView-image-wrapper .slick-arrow svg {
+    opacity: 0;
+}
+.productView-container .productView-image-wrapper .slick-arrow::before {
+    color: #000;
+    font-size: 25px;
+}
+.accordians-div-holder .accordion-item span {
+    color: #000;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+.accordians-div-holder span.accordion-icon {
+    font-size: 16px;
+    font-weight: 500 !important;
+}
+.productView-image-counter {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+.productView-image-counter span {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 7px;
+}
+.flex-label-if-have-size-button {
+    width: 100%;
+    display: flex !important;
+    justify-content: space-between;
+}
+a.size-chart-button-target {
+    border-bottom: 1px solid #000;
+}
+.productView-image-counter {
+    display: none;
+}
+
+
+
+/* @media screen and (max-width: 767px) {
+
+    .template-product header.navbar .nav-center a img {
+        filter: unset !important;
+    }
+    .template-product header.navbar li a {
+        color: #000 !important;
+    }
+    .header-mobile__wrapper button, .header-mobile__wrapper svg, .header-mobile__wrapper svg path {
+        color: #ffff !important;
+        fill: #ffff !important;
+    }
+    .template-product .product-details .productView-container {
+        padding: 0 !important;
+    }   
+    .template-product .halo-productView-right {
+        padding: 0 10px;
+    }
+    .template-product .header-mobile__item.header-mobile__item--logo a img {
+        filter: invert(1) ;
+    }    
+    .template-product .productView-container .productView-groupBottom {
+        margin-top: 10px !important;
+    }
+    .pdp-video-section-holder {
+        margin-top: 50px;
+    } 
+
+} */
+

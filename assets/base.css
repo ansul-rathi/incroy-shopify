@@ -198,6 +198,13 @@ option.soldout {
         .adaptive_height[style*="--padding-top-fpmb"] {
             padding-top: var(--padding-top-fpmb) !important;
         }
+        section.full-media-section {
+            justify-content: center;
+            text-align: center;
+        }
+        .full-media-section__button {
+            width: 120px !important;
+        }
     }
 
     .adaptive_height img {
@@ -3926,6 +3933,7 @@ summary::-webkit-details-marker {
 
     body.open_search_mobile:has(.header__search.show-popup-rtl) .halo-sidebar-left.halo-sidebar_search{
         transform: translateZ(0);
+            z-index: 9999;
     }
 
     .halo-sidebar.halo-sidebar-right{

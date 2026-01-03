@@ -5,6 +5,7 @@
 /* ====== CUSTOM HEADER PC - Hide on Mobile/Tablet ====== */
 .custom-header-pc {
   display: none;
+  overflow: visible;
 }
 
 /* Show only on desktop (min-width: 1024px) */
@@ -24,9 +25,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: transparent !important;
+  background: transparent;
   z-index: 1000;
-  transition: background-color 0.3s ease !important;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease, box-shadow 0.4s ease;
+  transform: translateY(0);
+  will-change: transform;
+  pointer-events: auto;
+}
+
+/* White background state - changes text colors */
+.custom-header-pc .navbar.white-bg .nav-item a {
+  color: black !important;
+}
+
+.custom-header-pc .navbar.white-bg .nav-logo {
+  filter: brightness(0) invert(0) !important;
+}
+
+.custom-header-pc .navbar.white-bg .nav-right a {
+  color: black !important;
+}
+
+.custom-header-pc .navbar.white-bg .header__icon {
+  color: black !important;
+}
+
+.custom-header-pc .navbar.white-bg .header__icon .stroke-icon {
+  fill: black !important;
+}
+
+.custom-header-pc .navbar.white-bg .cart-count-bubble {
+  background: black !important;
+  color: white !important;
 }
 
 /* ====== NAV MENU ====== */
@@ -34,95 +64,73 @@
   display: flex;
   list-style: none;
   gap: 40px;
+  margin: 0;
+  padding: 0;
 }
 
 .custom-header-pc .nav-item a {
-  position: relative;
   text-transform: uppercase;
   font-weight: 500;
-  color: white !important;
+  color: white;
   text-decoration: none;
-  transition: color 0.3s ease !important;
-}
-
-.custom-header-pc .nav-item a::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: currentColor;
-  transition: width 0.3s ease;
-}
-
-.custom-header-pc .nav-item a:hover::after {
-  width: 100%;
-}
-
-/* ====== RIGHT NAV MENU LINKS ====== */
-.custom-header-pc .nav-right .nav-menu li a {
-  color: white !important;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: 500;
-  transition: color 0.3s ease !important;
-}
-
-.custom-header-pc .nav-right .nav-menu li a:hover {
-  font-weight: 600;
+  transition: color 0.4s ease;
+  font-size: 14px;
 }
 
 /* ====== LOGO ====== */
 .custom-header-pc .nav-logo {
   height: 40px;
   cursor: pointer;
-  filter: brightness(0) invert(1) !important;
-  transition: filter 0.3s ease !important;
+  filter: brightness(0) invert(1);
+  transition: filter 0.4s ease;
+}
+
+/* ====== RIGHT NAV LINKS ====== */
+.custom-header-pc .nav-right .nav-menu li a {
+  color: white !important;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.4s ease;
+  font-size: 14px;
+}
+
+.custom-header-pc .navbar.scrolled .nav-right .nav-menu li a {
+  color: black !important;
 }
 
 /* ====== HEADER ICONS ====== */
-.custom-header-pc .navbar .header__icon {
-  color: white !important;
-  transition: color 0.3s ease !important;
+.custom-header-pc .header__icon {
+  color: white;
+  transition: color 0.4s ease;
 }
 
-.custom-header-pc .header__icon .icon {
-  fill: rgb(255, 255, 255);
-  stroke: transparent;
+.custom-header-pc .header__icon .stroke-icon {
+  
+  transition: stroke 0.4s ease;
+  height: 23px;
+    width: 23px;
 }
 
-.custom-header-pc .header__icon span {
-  display: flex !important;
+.custom-header-pc .navbar.scrolled .header__icon {
+  color: black;
 }
 
-.custom-header-pc .header__icon .w-h-24 {
-  width: 18px;
-  height: 18px;
+.custom-header-pc .navbar.scrolled .header__icon .stroke-icon {
+ 
+  fill: black !important;
 }
 
 /* ====== CART COUNT BUBBLE ====== */
-.custom-header-pc .navbar .cart-count-bubble {
-  background: white !important;
-  color: black !important;
-  transition: all 0.3s ease !important;
-  position: relative;
-  top: -8px;
-  left: -8px;
-  height: 18px;
-  width: 18px;
+.custom-header-pc .cart-count-bubble {
+  background: white;
+  color: black;
+  transition: all 0.4s ease;
 }
 
-@media (min-width: 768px) {
-  .cart-count-bubble,
-  .wishlist-count-bubble {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 0 !important;
-    min-height: 0 !important;
-  }
+.custom-header-pc .navbar.scrolled .cart-count-bubble {
+  background: black;
+  color: white;
 }
 
 /* ====== NAVBAR HOVER STATE - Only on Menu Items with Dropdown ====== */
@@ -486,53 +494,6 @@
   .dropdown-right {
     height: 300px;
   }
-}
-
-/* ======================================
-   URL BASED HEADER COLOR CONTROL
-   ====================================== */
-
-/* Header hamesha transparent */
-.custom-header-pc .navbar {
-  background: transparent !important;
-}
-
-/* URL MATCH → BLACK TEXT / ICONS */
-.header-black-url .custom-header-pc .navbar a,
-.header-black-url .custom-header-pc .navbar .nav-item a,
-.header-black-url .custom-header-pc .navbar .header__icon {
-  color: black !important;
-}
-
-.header-black-url .custom-header-pc .stroke-icon {
-  stroke: black !important;
-}
-
-.header-black-url .custom-header-pc .nav-logo {
-  filter: brightness(0) invert(0) !important;
-}
-
-.header-black-url .cart-count-bubble {
-  background: black !important;
-  color: white !important;
-}
-
-/* ===============================
-   URL BASED FIX – RIGHT SIDE NAV
-   =============================== */
-
-/* Right menu links (About, Contact, Blog etc.) */
-.header-black-url .custom-header-pc .nav-right .nav-menu li a {
-  color: black !important;
-}
-
-/* Header icons (account, cart etc.) */
-.header-black-url .custom-header-pc .nav-right .header__icon {
-  color: black !important;
-}
-
-.header-black-url .custom-header-pc .nav-right .stroke-icon {
-  stroke: black !important;
 }
 
 

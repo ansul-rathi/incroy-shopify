@@ -7,57 +7,57 @@
 <!-- Please use only JS to style the layout. -->
 <!-- ============================================================================= -->
 // ====== MEGA MENU SCRIPT ======
-const navItems = document.querySelectorAll(".nav-item");
-const dropdowns = document.querySelectorAll(".dropdown");
+// const navItems = document.querySelectorAll(".nav-item");
+// const dropdowns = document.querySelectorAll(".dropdown");
 
-function hideAllDropdowns() {
-  dropdowns.forEach((d) => d.classList.remove("active"));
-}
+// function hideAllDropdowns() {
+//   dropdowns.forEach((d) => d.classList.remove("active"));
+// }
 
-navItems.forEach((item) => {
-  item.addEventListener("mouseenter", () => {
-    hideAllDropdowns();
-    const menuType = item.dataset.menu;
-    const target = document.getElementById(`${menuType}-dropdown`);
-    if (target) target.classList.add("active");
-  });
-});
+// navItems.forEach((item) => {
+//   item.addEventListener("mouseenter", () => {
+//     hideAllDropdowns();
+//     const menuType = item.dataset.menu;
+//     const target = document.getElementById(`${menuType}-dropdown`);
+//     if (target) target.classList.add("active");
+//   });
+// });
 
-dropdowns.forEach((dropdown) => {
-  dropdown.addEventListener("mouseenter", () => dropdown.classList.add("active"));
-  dropdown.addEventListener("mouseleave", () => dropdown.classList.remove("active"));
-});
+// dropdowns.forEach((dropdown) => {
+//   dropdown.addEventListener("mouseenter", () => dropdown.classList.add("active"));
+//   dropdown.addEventListener("mouseleave", () => dropdown.classList.remove("active"));
+// });
 
-const navbar = document.querySelector(".navbar");
-navbar.addEventListener("mouseleave", () => hideAllDropdowns());
+// const navbar = document.querySelector(".navbar");
+// navbar.addEventListener("mouseleave", () => hideAllDropdowns());
 
-// ====== TOGGLE LOGIC ======
-const toggles = document.querySelectorAll(".toggle");
-toggles.forEach((toggle) => {
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const submenu = toggle.nextElementSibling;
-    const arrow = toggle.querySelector(".arrow-icon");
+// // ====== TOGGLE LOGIC ======
+// const toggles = document.querySelectorAll(".toggle");
+// toggles.forEach((toggle) => {
+//   toggle.addEventListener("click", (e) => {
+//     e.stopPropagation();
+//     const submenu = toggle.nextElementSibling;
+//     const arrow = toggle.querySelector(".arrow-icon");
 
-    const allMenus = toggle.closest(".menu-sections").querySelectorAll(".menu-group ul");
-    const allArrows = toggle.closest(".menu-sections").querySelectorAll(".arrow-icon");
+//     const allMenus = toggle.closest(".menu-sections").querySelectorAll(".menu-group ul");
+//     const allArrows = toggle.closest(".menu-sections").querySelectorAll(".arrow-icon");
 
-    allMenus.forEach((menu) => {
-      if (menu !== submenu) menu.classList.remove("active");
-    });
-    allArrows.forEach((arr) => {
-      if (arr !== arrow) arr.classList.remove("rotated");
-    });
+//     allMenus.forEach((menu) => {
+//       if (menu !== submenu) menu.classList.remove("active");
+//     });
+//     allArrows.forEach((arr) => {
+//       if (arr !== arrow) arr.classList.remove("rotated");
+//     });
 
-    submenu.classList.toggle("active");
-    arrow.classList.toggle("rotated");
-  });
-});
+//     submenu.classList.toggle("active");
+//     arrow.classList.toggle("rotated");
+//   });
+// });
 
-document.addEventListener("click", (event) => {
-  const isInsideDropdown = event.target.closest(".dropdown") || event.target.closest(".nav-item");
-  if (!isInsideDropdown) hideAllDropdowns();
-});
+// document.addEventListener("click", (event) => {
+//   const isInsideDropdown = event.target.closest(".dropdown") || event.target.closest(".nav-item");
+//   if (!isInsideDropdown) hideAllDropdowns();
+// });
 
 /* ------------------------------------------------------------------------------product card plus icon for size variant--------------------------------- */
 // document.addEventListener('DOMContentLoaded', function () {
@@ -184,51 +184,51 @@ document.addEventListener("click", (event) => {
 // });
 
 
-document.addEventListener("DOMContentLoaded", function () {
-  const path = window.location.pathname;
+// document.addEventListener("DOMContentLoaded", function () {
+//   const path = window.location.pathname;
 
-  // Pages jahan BLACK header chahiye
-  const blackHeaderPages = [
-    "/pages/contact",
-    "/blogs/news",
-    "/pages/about-us",
-    "/account/login",
-    "/pages/shipping-policy",
-    "/pages/privacy-policy",
-    "/pages/returns-refunds",
-    "/pages/terms-conditions"
-  ];
+//   // Pages jahan BLACK header chahiye
+//   const blackHeaderPages = [
+//     "/pages/contact",
+//     "/blogs/news",
+//     "/pages/about-us",
+//     "/account/login",
+//     "/pages/shipping-policy",
+//     "/pages/privacy-policy",
+//     "/pages/returns-refunds",
+//     "/pages/terms-conditions"
+//   ];
 
-  const body = document.body;
+//   const body = document.body;
 
-  if (blackHeaderPages.includes(path)) {
-    body.classList.add("header-black-url");
-  }
-});
+//   if (blackHeaderPages.includes(path)) {
+//     body.classList.add("header-black-url");
+//   }
+// });
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Check if HOME page
-  if (window.location.pathname === "/" || document.body.classList.contains("template-index")) {
+// document.addEventListener("DOMContentLoaded", function () {
+//   // Check if HOME page
+//   if (window.location.pathname === "/" || document.body.classList.contains("template-index")) {
 
-    // Mobile header icons
-    document.querySelectorAll(
-      ".header-mobile__item .icon, .header-mobile__item svg.icon path"
-    ).forEach(el => {
-      el.style.fill = "white";
-    });
+//     // Mobile header icons
+//     document.querySelectorAll(
+//       ".header-mobile__item .icon, .header-mobile__item svg.icon path"
+//     ).forEach(el => {
+//       el.style.fill = "white";
+//     });
 
-    // Logo invert
-    const logo = document.querySelector(".header__heading-logo");
-    if (logo) {
-      logo.style.filter = "invert(1)";
-    }
+//     // Logo invert
+//     const logo = document.querySelector(".header__heading-logo");
+//     if (logo) {
+//       logo.style.filter = "invert(1)";
+//     }
 
-    // Menu trigger text
-    document.querySelectorAll(".menu-trigger").forEach(el => {
-      el.style.color = "white";
-    });
+//     // Menu trigger text
+//     document.querySelectorAll(".menu-trigger").forEach(el => {
+//       el.style.color = "white";
+//     });
 
-  }
-});
+//   }
+// });
 
 

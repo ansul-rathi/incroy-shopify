@@ -209,8 +209,18 @@
 
 .custom-header-pc:has(.dropdown.active) .navbar a,
 .custom-header-pc:has(.dropdown.active) .navbar .nav-item a,
+.custom-header-pc:has(.dropdown.active) .navbar .nav-right a,
 .custom-header-pc:has(.dropdown.active) .navbar .header__icon {
   color: black !important;
+}
+
+.custom-header-pc:has(.dropdown.active) .navbar .header__icon--cart {
+  color: black !important;
+}
+
+.custom-header-pc:has(.dropdown.active) .navbar .header__icon--cart .stroke-icon {
+  fill: black !important;
+
 }
 
 .custom-header-pc:has(.dropdown.active) .navbar .stroke-icon {
@@ -234,8 +244,18 @@
 
 .custom-header-pc:has(.nav-item[data-menu]:hover) .navbar a,
 .custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .nav-item a,
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .nav-right a,
 .custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .header__icon {
   color: black !important;
+}
+
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .header__icon--cart {
+  color: black !important;
+}
+
+.custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .header__icon--cart .stroke-icon {
+  fill: black !important;
+  stroke: black !important;
 }
 
 .custom-header-pc:has(.nav-item[data-menu]:hover) .navbar .stroke-icon {

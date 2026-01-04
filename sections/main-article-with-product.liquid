@@ -436,7 +436,7 @@
                                 >
                                     <div class="articleLookbook-item">
                                             {%- if image != blank -%}
-                                                <a class="image image-zoom1 image-adapt adaptive_height"{% if link == blank %} role="link" aria-disabled="true"{% else %} href="{{ link }}"{% endif %} style="padding-top: {{ 1 | divided_by: image.aspect_ratio | times: 100 | append: '%' }}">
+                                                <a class="image  image-adapt adaptive_height"{% if link == blank %} role="link" aria-disabled="true"{% else %} href="{{ link }}"{% endif %} style="padding-top: {{ 1 | divided_by: image.aspect_ratio | times: 100 | append: '%' }}">
                                                     <img {% render 'lazyload',preview_img: preview_img %} />
                                                     {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
                                                 </a>

@@ -49,12 +49,16 @@ CUSTOM HEADER (PC ONLY)
     const navItems = document.querySelectorAll('.nav-item');
     const dropdowns = document.querySelectorAll('.dropdown');
     const isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+    const isPDP = document.body.classList.contains('template-product') || window.location.pathname.includes('/products/');
+    const isCollection = document.body.classList.contains('template-collection') || window.location.pathname.includes('/collections/');
     let lastScrollTop = 0;
     let ticking = false;
+    let isDropdownOpen = false;
 
     // Dropdown functionality
     function hideAllDropdowns() {
       dropdowns.forEach(d => d.classList.remove('active'));
+      isDropdownOpen = false;
     }
 
     navItems.forEach(item => {
@@ -62,16 +66,27 @@ CUSTOM HEADER (PC ONLY)
         hideAllDropdowns();
         const menuType = item.dataset.menu;
         const target = document.getElementById(`${menuType}-dropdown`);
-        if (target) target.classList.add('active');
+        if (target) {
+          target.classList.add('active');
+          isDropdownOpen = true;
+        }
       });
     });
 
     dropdowns.forEach(dropdown => {
-      dropdown.addEventListener('mouseenter', () => dropdown.classList.add('active'));
-      dropdown.addEventListener('mouseleave', () => dropdown.classList.remove('active'));
+      dropdown.addEventListener('mouseenter', () => {
+        dropdown.classList.add('active');
+        isDropdownOpen = true;
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        dropdown.classList.remove('active');
+        isDropdownOpen = false;
+      });
     });
 
-    navbar.addEventListener('mouseleave', () => hideAllDropdowns());
+    navbar.addEventListener('mouseleave', () => {
+      hideAllDropdowns();
+    });
 
     // Scroll functionality
     if (isHomePage) {
@@ -79,6 +94,53 @@ CUSTOM HEADER (PC ONLY)
       navbar.style.background = 'transparent';
       navbar.style.boxShadow = 'none';
       navbar.classList.remove('white-bg');
+    } else if (isPDP) {
+      // PDP page: Transparent with black text - fixed (no scroll hide)
+      navbar.style.background = 'transparent';
+      navbar.style.boxShadow = 'none';
+      navbar.classList.add('pdp-page');
+      navbar.classList.remove('white-bg');
+    } else if (isCollection) {
+      // Collection page: Transparent at top with white text, white when scrolled
+      let lastScroll = 0;
+      
+      function updateCollectionScroll() {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // At top: transparent with white text
+        if (currentScroll <= 0) {
+          navbar.style.background = 'transparent';
+          navbar.style.boxShadow = 'none';
+          navbar.classList.remove('white-bg');
+        } else {
+          // Scrolled down: white background with black text
+          navbar.style.background = 'white';
+          navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+          navbar.classList.add('white-bg');
+        }
+        
+        // Hide/show on scroll
+        if (isDropdownOpen) {
+          navbar.style.transform = 'translateY(0)';
+        } else if (currentScroll > lastScroll) {
+          navbar.style.transform = 'translateY(-100%)';
+        } else {
+          navbar.style.transform = 'translateY(0)';
+        }
+        
+        lastScroll = Math.max(0, currentScroll);
+        ticking = false;
+      }
+      
+      // Initial state at page load
+      updateCollectionScroll();
+      
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateCollectionScroll);
+          ticking = true;
+        }
+      }, { passive: true });
     } else {
       // Other pages: Always white background with hide/show on scroll
       navbar.style.background = 'white';
@@ -87,6 +149,14 @@ CUSTOM HEADER (PC ONLY)
       
       function updateScroll() {
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Don't hide navbar if dropdown is open
+        if (isDropdownOpen) {
+          navbar.style.transform = 'translateY(0)';
+          lastScrollTop = Math.max(0, currentScroll);
+          ticking = false;
+          return;
+        }
         
         if (currentScroll > lastScrollTop) {
           // Scrolling DOWN - slide header up (hide)

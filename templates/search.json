@@ -61,7 +61,7 @@
         "sidebar_heading_font_size": 14,
         "sidebar_heading_font_weight": "700",
         "sidebar_heading_text_transform": "uppercase",
-        "show_filter": true,
+        "show_filter": false,
         "filter_swatch": "Color",
         "filter_swatch_type": "color",
         "filter_rectangle": "Size",

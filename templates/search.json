@@ -74,7 +74,7 @@
         "products_per_page": "15",
         "layout": "3",
         "article_page_per_load": "10",
-        "product_space_between_vert_desk": 30,
+        "product_space_between_vert_desk": 2,
         "product_space_between_vert_mb": 16,
         "product_space_between_horiz_desk": 60,
         "product_space_between_horiz_mb": 30,

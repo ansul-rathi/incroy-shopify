@@ -7,57 +7,67 @@
 <!-- Please use only JS to style the layout. -->
 <!-- ============================================================================= -->
 // ====== MEGA MENU SCRIPT ======
-// const navItems = document.querySelectorAll(".nav-item");
-// const dropdowns = document.querySelectorAll(".dropdown");
+const navItems = document.querySelectorAll(".nav-item");
+const dropdowns = document.querySelectorAll(".dropdown");
 
-// function hideAllDropdowns() {
-//   dropdowns.forEach((d) => d.classList.remove("active"));
-// }
+function hideAllDropdowns() {
+  dropdowns.forEach((d) => d.classList.remove("active"));
+}
 
-// navItems.forEach((item) => {
-//   item.addEventListener("mouseenter", () => {
-//     hideAllDropdowns();
-//     const menuType = item.dataset.menu;
-//     const target = document.getElementById(`${menuType}-dropdown`);
-//     if (target) target.classList.add("active");
-//   });
-// });
+navItems.forEach((item) => {
+  item.addEventListener("mouseenter", () => {
+    hideAllDropdowns();
+    const menuType = item.dataset.menu;
+    const target = document.getElementById(`${menuType}-dropdown`);
+    if (target) target.classList.add("active");
+  });
+});
 
-// dropdowns.forEach((dropdown) => {
-//   dropdown.addEventListener("mouseenter", () => dropdown.classList.add("active"));
-//   dropdown.addEventListener("mouseleave", () => dropdown.classList.remove("active"));
-// });
+navItems.forEach((item) => {
+  item.addEventListener("click", (e) => {
+    e.preventDefault();
+    hideAllDropdowns();
+    const menuType = item.dataset.menu;
+    const target = document.getElementById(`${menuType}-dropdown`);
+    if (target) target.classList.add("active");
+  });
+});
 
-// const navbar = document.querySelector(".navbar");
-// navbar.addEventListener("mouseleave", () => hideAllDropdowns());
+dropdowns.forEach((dropdown) => {
+  dropdown.addEventListener("mouseenter", () => dropdown.classList.add("active"));
+  dropdown.addEventListener("mouseleave", () => dropdown.classList.remove("active"));
+});
 
-// // ====== TOGGLE LOGIC ======
-// const toggles = document.querySelectorAll(".toggle");
-// toggles.forEach((toggle) => {
-//   toggle.addEventListener("click", (e) => {
-//     e.stopPropagation();
-//     const submenu = toggle.nextElementSibling;
-//     const arrow = toggle.querySelector(".arrow-icon");
+const navbar = document.querySelector(".navbar");
+navbar.addEventListener("mouseleave", () => hideAllDropdowns());
 
-//     const allMenus = toggle.closest(".menu-sections").querySelectorAll(".menu-group ul");
-//     const allArrows = toggle.closest(".menu-sections").querySelectorAll(".arrow-icon");
+// ====== TOGGLE LOGIC ======
+const toggles = document.querySelectorAll(".toggle");
+toggles.forEach((toggle) => {
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const submenu = toggle.nextElementSibling;
+    const arrow = toggle.querySelector(".arrow-icon");
 
-//     allMenus.forEach((menu) => {
-//       if (menu !== submenu) menu.classList.remove("active");
-//     });
-//     allArrows.forEach((arr) => {
-//       if (arr !== arrow) arr.classList.remove("rotated");
-//     });
+    const allMenus = toggle.closest(".menu-sections").querySelectorAll(".menu-group ul");
+    const allArrows = toggle.closest(".menu-sections").querySelectorAll(".arrow-icon");
 
-//     submenu.classList.toggle("active");
-//     arrow.classList.toggle("rotated");
-//   });
-// });
+    allMenus.forEach((menu) => {
+      if (menu !== submenu) menu.classList.remove("active");
+    });
+    allArrows.forEach((arr) => {
+      if (arr !== arrow) arr.classList.remove("rotated");
+    });
 
-// document.addEventListener("click", (event) => {
-//   const isInsideDropdown = event.target.closest(".dropdown") || event.target.closest(".nav-item");
-//   if (!isInsideDropdown) hideAllDropdowns();
-// });
+    submenu.classList.toggle("active");
+    arrow.classList.toggle("rotated");
+  });
+});
+
+document.addEventListener("click", (event) => {
+  const isInsideDropdown = event.target.closest(".dropdown") || event.target.closest(".nav-item");
+  if (!isInsideDropdown) hideAllDropdowns();
+});
 
 /* ------------------------------------------------------------------------------product card plus icon for size variant--------------------------------- */
 // document.addEventListener('DOMContentLoaded', function () {

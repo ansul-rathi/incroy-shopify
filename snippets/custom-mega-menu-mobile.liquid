@@ -1,9 +1,9 @@
 <div class="mobile-menu-wrapper">
   <!-- Trigger Button -->
-  <button class="menu-trigger " id="openMenu">☰</button>
+  <button class="menu-trigger" id="openMenu" style="--menu-icon-color: {{ icon_color }}; --menu-normal-color: {{ normal_color }};">☰</button>
 
   <!-- Overlay Menu -->
-  <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu" id="mobileMenu"{% if menu_tab_bg %} style="--menu-tab-bg: {{ menu_tab_bg }};"{% endif %}>
     <!-- Header -->
     <div class="menu-header">
       <span class="close-icon" id="closeMenu">✕</span>

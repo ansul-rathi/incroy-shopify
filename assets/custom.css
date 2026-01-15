@@ -240,6 +240,63 @@ button.parallax-heading-btn.active {
 
 /* ====== PRODUCT CARD MOBILE STYLES ====== */
 @media (max-width: 768px) {
+ 
+
+/* Mobile Menu Icon Color - Transparent Header Support */
+.header-mobile--transparent .menu-trigger {
+    color: white;
+}
+
+.section-header-mobile.scrolled-past-header .menu-trigger {
+    color: var(--menu-normal-color) !important;
+}
+
+/* Mobile Search, Account, Cart Icon Color - Transparent Header Support */
+.header-mobile--transparent .header__iconItem.header__search,
+.header-mobile--transparent .header-mobile--icon[style*="--i-color"] {
+    --i-color: white !important;
+}
+
+.header-mobile--transparent .header__icon--search,
+.header-mobile--transparent .header__icon--account,
+.header-mobile--transparent .header__icon--cart {
+    color: white;
+}
+
+.header-mobile--transparent .header__icon--search .icon,
+.header-mobile--transparent .header__icon--account .icon,
+.header-mobile--transparent .header__icon--cart .icon,
+.header-mobile--transparent .icon-search,
+.header-mobile--transparent .icon-close {
+    fill: white;
+    stroke: white;
+}
+
+.section-header-mobile.scrolled-past-header .header__icon--search,
+.section-header-mobile.scrolled-past-header .header__icon--account,
+.section-header-mobile.scrolled-past-header .header__icon--cart {
+    color: var(--i-color) !important;
+}
+
+.section-header-mobile.scrolled-past-header .header__icon--search .icon,
+.section-header-mobile.scrolled-past-header .header__icon--account .icon,
+.section-header-mobile.scrolled-past-header .header__icon--cart .icon,
+.section-header-mobile.scrolled-past-header .icon-search,
+.section-header-mobile.scrolled-past-header .icon-close {
+    fill: var(--i-color) !important;
+    stroke: var(--i-color) !important;
+}
+
+/* Mobile Logo Filter - Invert on non-transparent header */
+.header-mobile--icon .header__heading-link {
+    width: var(--width-logo-mb);
+    filter: invert(1);
+}
+
+/* Logo normal on transparent header (home page) */
+.header-mobile--transparent .header-mobile--icon .header__heading-link {
+    filter: none;
+}
 
 .header-mobile__item .header__icon--cart .cart-count-bubble {
     border: 1px solid #000 !Important;

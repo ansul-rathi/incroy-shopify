@@ -212,8 +212,8 @@ button.parallax-heading-btn.active {
 .cart-count-bubble, .wishlist-count-bubble {
   /* right: 20px !important; */
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -10px;
+  right: -12px;
 }
 
 /* ====== PRODUCT CARD TITLE AND PRICE ====== */
@@ -429,5 +429,4 @@ body:not(.template-product) .custom-header-pc .nav-right .nav-menu li a {
 .template-product .custom-header-pc .header__icon .icon {
   fill: #000000 !important;
 }
-
 

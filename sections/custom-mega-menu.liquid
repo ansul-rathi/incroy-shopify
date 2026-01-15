@@ -27,8 +27,32 @@ CUSTOM HEADER (PC ONLY)
         <li><a href="#">About</a></li>
         <li><a href="#">Blog</a></li>
         <li><a href="{{ routes.account_url }}">Account</a></li>
+        <li>
+          <details-modal class="header__iconItem header__search custom-search-modal">
+            <summary class="header__search-full header__icon header__icon--search" aria-haspopup="dialog" aria-label="{{ 'general.search.search' | t }}">
+              {% render 'icon-search', class: 'stroke-icon' %}
+            </summary>
+            <div class="modal__content">
+             
+              <div class="search__form-container">
+                 <button type="button" class="modal__close-button" aria-label="{{ 'general.common.close' | t }}">
+                {% render 'icon-close' %}
+              </button>
+                <form action="{{ routes.search_url }}" method="get" class="search__form" role="search">
+                  <input type="hidden" name="type" value="product">
+                  <div class="search__input-wrapper">
+                    <input type="search" name="q" class="search__input" placeholder="{{ 'general.search.search' | t }}" value="{{ search.term }}">
+                    <button type="submit" class="search__button" aria-label="{{ 'general.search.search' | t }}">
+                      {% render 'icon-search' %}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </details-modal>
+        </li>
         <li><a href="{{ routes.cart_url }}" class="header__icon header__icon--cart" {% if settings.show_quick_cart %} data-cart-sidebar{% endif %}>
-    {% render 'icon-cart-02', class: 'stroke-icon', width: '24' %}
+    {% render 'icon-cart-02', class: 'stroke-icon' %}
     <div class="cart-count-bubble">
         <span class="text" data-cart-count>{{ cart.item_count }}</span>
     </div>
@@ -42,3 +66,203 @@ CUSTOM HEADER (PC ONLY)
   {% render 'mega-menu-women' %}
   {% render 'mega-menu-exceptional' %}
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.custom-header-pc .navbar');
+    const navItems = document.querySelectorAll('.nav-item');
+    const dropdowns = document.querySelectorAll('.dropdown');
+    const searchModal = document.querySelector('.custom-search-modal');
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+    const isPDP = document.body.classList.contains('template-product') || window.location.pathname.includes('/products/');
+    const isCollection = document.body.classList.contains('template-collection') || window.location.pathname.includes('/collections/');
+    let lastScrollTop = 0;
+    let ticking = false;
+    let isDropdownOpen = false;
+
+    // Search Modal Functionality
+    if (searchModal) {
+      const searchSummary = searchModal.querySelector('.header__search-full');
+      const searchForm = searchModal.querySelector('.search__form');
+      const closeButton = searchModal.querySelector('.modal__close-button');
+      const modalContent = searchModal.querySelector('.modal__content');
+      
+      // Open modal
+      searchSummary.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        searchModal.setAttribute('open', '');
+        const input = searchModal.querySelector('.search__input');
+        if (input) setTimeout(() => input.focus(), 100);
+      });
+
+      // Close modal
+      function closeSearchModal() {
+        searchModal.removeAttribute('open');
+      }
+
+      closeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeSearchModal();
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && searchModal.hasAttribute('open')) {
+          closeSearchModal();
+        }
+      });
+
+      // Close modal when clicking outside
+      document.addEventListener('click', function(e) {
+        if (searchModal.hasAttribute('open') && 
+            !searchModal.contains(e.target) && 
+            e.target !== searchSummary) {
+          closeSearchModal();
+        }
+      });
+
+      // Prevent closing when clicking inside modal content
+      if (modalContent) {
+        modalContent.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+
+      // Submit search form
+      if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const query = searchForm.querySelector('.search__input').value.trim();
+          if (query) {
+            window.location.href = '{{ routes.search_url }}?type=product&q=' + encodeURIComponent(query);
+          }
+        });
+      }
+    }
+
+    // Dropdown functionality
+    function hideAllDropdowns() {
+      dropdowns.forEach(d => d.classList.remove('active'));
+      isDropdownOpen = false;
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        hideAllDropdowns();
+        const menuType = item.dataset.menu;
+        const target = document.getElementById(`${menuType}-dropdown`);
+        if (target) {
+          target.classList.add('active');
+          isDropdownOpen = true;
+        }
+      });
+    });
+
+    dropdowns.forEach(dropdown => {
+      dropdown.addEventListener('mouseenter', () => {
+        dropdown.classList.add('active');
+        isDropdownOpen = true;
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        dropdown.classList.remove('active');
+        isDropdownOpen = false;
+      });
+    });
+
+    navbar.addEventListener('mouseleave', () => {
+      hideAllDropdowns();
+    });
+
+    // Scroll functionality
+    if (isHomePage) {
+      // Home page: Sticky and transparent - no changes
+      navbar.style.background = 'transparent';
+      navbar.style.boxShadow = 'none';
+      navbar.classList.remove('white-bg');
+    } else if (isPDP) {
+      // PDP page: Transparent with black text - fixed (no scroll hide)
+      navbar.style.background = 'transparent';
+      navbar.style.boxShadow = 'none';
+      navbar.classList.add('pdp-page');
+      navbar.classList.remove('white-bg');
+    } else if (isCollection) {
+      // Collection page: Transparent at top with white text, white when scrolled
+      let lastScroll = 0;
+      
+      function updateCollectionScroll() {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // At top: transparent with white text
+        if (currentScroll <= 0) {
+          navbar.style.background = 'transparent';
+          navbar.style.boxShadow = 'none';
+          navbar.classList.remove('white-bg');
+        } else {
+          // Scrolled down: white background with black text
+          navbar.style.background = 'white';
+          // navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+          navbar.classList.add('white-bg');
+        }
+        
+        // Hide/show on scroll
+        if (isDropdownOpen) {
+          navbar.style.transform = 'translateY(0)';
+        } else if (currentScroll > lastScroll) {
+          navbar.style.transform = 'translateY(-100%)';
+        } else {
+          navbar.style.transform = 'translateY(0)';
+        }
+        
+        lastScroll = Math.max(0, currentScroll);
+        ticking = false;
+      }
+      
+      // Initial state at page load
+      updateCollectionScroll();
+      
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateCollectionScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+    } else {
+      // Other pages: Always white background with hide/show on scroll
+      navbar.style.background = 'white';
+      // navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+      navbar.classList.add('white-bg');
+      
+      function updateScroll() {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Don't hide navbar if dropdown is open
+        if (isDropdownOpen) {
+          navbar.style.transform = 'translateY(0)';
+          lastScrollTop = Math.max(0, currentScroll);
+          ticking = false;
+          return;
+        }
+        
+        if (currentScroll > lastScrollTop) {
+          // Scrolling DOWN - slide header up (hide)
+          navbar.style.transform = 'translateY(-100%)';
+        } else {
+          // Scrolling UP - slide header down (show)
+          navbar.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = Math.max(0, currentScroll);
+        ticking = false;
+      }
+      
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+  });
+</script>

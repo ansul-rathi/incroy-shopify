@@ -11,7 +11,15 @@
       <ul class="menu-tabs">
         <li><a href="#" class="menu-tab active" data-tab="men">MEN</a></li>
         <li><a href="#" class="menu-tab" data-tab="women">WOMEN</a></li>
-        <li class="menu-tab-right"><a href="#" class="menu-tab" data-tab="exceptional">EXCEPTIONALS</a></li>
+       <li class="menu-tab-right">
+  <img 
+    src="{{ 'ExceptionalLogo.svg' | asset_url }}" 
+    alt="Exceptionals Logo" 
+    class="exceptional-logo"
+  >
+  <a href="#" class="menu-tab" data-tab="exceptional">EXCEPTIONALS</a>
+</li>
+
       </ul>
     </div>
 
@@ -111,29 +119,34 @@
             </ul>
           </div>
 
-          {% comment %} <div class="menu-section">
-            <h2 class="menu-title">DROPS <span class="arrow">→</span></h2>
-            <ul class="submenu">
-              <li><a href="/collections/exceptionals-01">Exceptionals 01</a></li>
-              <li><a href="/collections/exceptionals-signature">Signature Collection</a></li>
-            </ul>
-          </div> {% endcomment %}
+          
+
+          
         </div>
 
       </div>
 
-      
-
+      <div class="mobile-menu-bottom">
+        <a href="/pages/about-us">About Us</a>
+        <a href="/pages/contact">Contact Us</a>
+      </div>
     </div>
-    <!-- FOOTER -->
-       <div class="mobile-menu-bottom">
-  <a href="/pages/about-us">About Us</a>
-  <a href="/pages/contact">Contact Us</a>
-</div>
   </div>
 </div>
 
 <style>
+  .menu-tab-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exceptional-logo {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
   @media (max-width: 768px) {
   .menu-tab-right {
     margin-left: auto;
@@ -144,23 +157,21 @@
 
 
 .mobile-menu-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   display: flex;
   background: #fff;
   border-top: 1px solid #000;
-  z-index: 1001;
+  flex-shrink: 0;
 }
 
 .mobile-menu-bottom a {
   flex: 1;
   text-align: center;
-  padding: 16px 0;
+  padding: 10px 0;
   text-decoration: none;
   color: #000;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -170,33 +181,28 @@
 
 
 .menu-content {
-  padding-bottom: 70px;
-}
-
-  .mobile-menu-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  background: #fff;
-  border-top: 1px solid #000;
-  z-index: 1000;
-}
-
-.mobile-menu-bottom a {
   flex: 1;
-  text-align: center;
-  padding: 16px 0;
-  text-decoration: none;
-  color: #000;
-  font-size: 16px;
-  font-weight: 500;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.mobile-menu-bottom a:first-child {
-  border-right: 1px solid #000;
+#menuDataWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
+
+.menu-data {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 0;
+}
+
 .new-arrival h3 {
   color:white;
 }
@@ -217,12 +223,14 @@
 
   .mobile-menu {
     position: fixed; top: 0; left: -100%;
-    width: 100%; height: 100vh;
+    width: 100%; height: 100%;
     backdrop-filter: blur(10px);
     background: rgba(255,255,255,0.95);
     transition: left .4s ease;
     z-index: 999;
-    display: flex; flex-direction: column;
+    display: flex; 
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .mobile-menu.active { left: 0; }
@@ -230,44 +238,88 @@
   /* HEADER */
   .menu-header {
     border-bottom: 1px solid rgba(0,0,0,0.1);
-    margin-top:20px;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    flex-shrink: 0;
   }
   .close-icon {
-    font-size: 28px; padding: 20px; cursor: pointer;
+    font-size: 24px; 
+    padding: 10px 15px; 
+    cursor: pointer;
+    display: inline-block;
   }
 
   .menu-tabs {
-    display: flex; justify-content: center;
-    list-style: none; gap: 25px; padding: 0 0 10px;
+    display: flex; 
+    justify-content: center;
+    list-style: none; 
+    gap: 12px; 
+    padding: 0 10px;
+    flex-wrap: wrap;
   }
   .menu-tab { 
-    color: #000; text-decoration: none;
-    font-size: 15px; font-weight: 500;
+    color: #000; 
+    text-decoration: none;
+    font-size: 12px; 
+    font-weight: 500;
   }
-  .menu-tab.active { text-decoration: underline; font-weight: 700; }
+  .menu-tab.active { 
+    text-decoration: underline; 
+    font-weight: 700; 
+  }
 
   /* NEW ARRIVAL */
   .new-arrival {
-    background: #000; color: #fff;
-    padding: 14px 20px; margin-top: 10px;
+    background: #000; 
+    color: #fff;
+    padding: 8px 12px; 
+    margin-top: 5px;
   }
 
-  .arrival-item { display: flex; gap: 10px; margin-top: 10px; }
+  .arrival-item { 
+    display: flex; 
+    gap: 6px; 
+    margin-top: 5px; 
+  }
   .n-icon {
-    background: #fff; color: #000;
-    padding: 3px 8px; font-weight: bold; border-radius: 3px;
+    background: #fff; 
+    color: #000;
+    padding: 2px 5px; 
+    font-weight: bold; 
+    border-radius: 3px;
+    font-size: 11px;
   }
 
-  .menu-section { padding: 20px; }
+  .menu-section { 
+    padding: 10px 12px; 
+  }
   .menu-title {
-    font-size: 22px; font-weight: 700;
-    display: flex; justify-content: space-between; cursor: pointer;
+    font-size: 16px; 
+    font-weight: 700;
+    display: flex; 
+    justify-content: space-between; 
+    cursor: pointer;
+    margin: 3px 0;
   }
 
-  .submenu { display: none; list-style: none; padding-left: 15px; margin-top: 10px; }
-  .submenu li { margin: 8px 0; }
-  .submenu a { font-size: 17px; color: #000; text-decoration: none; }
-  .submenu a.active { text-decoration: underline; font-weight: 600; }
+  .submenu { 
+    display: none; 
+    list-style: none; 
+    padding-left: 8px; 
+    margin-top: 5px; 
+  }
+  .submenu li { 
+    margin: 4px 0; 
+  }
+  .submenu a { 
+    font-size: 13px; 
+    color: #000; 
+    text-decoration: none; 
+  }
+  .submenu a.active { 
+    text-decoration: underline; 
+    font-weight: 600; 
+  }
 
   .menu-footer {
     margin-top: auto; padding: 25px 20px; display: flex; flex-direction: column; gap: 15px;
@@ -286,6 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
   openMenu.addEventListener("click", () => {
     mobileMenu.classList.add("active");
     openMenu.style.display = "none";
+    document.body.style.overflow = "hidden";
 
     // Open first submenu of active tab on menu open
     const activeTab = document.querySelector(".menu-tab.active");
@@ -307,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
   closeMenu.addEventListener("click", () => {
     mobileMenu.classList.remove("active");
     openMenu.style.display = "block";
+    document.body.style.overflow = "";
   });
 
   // TAB SWITCH LOGIC
